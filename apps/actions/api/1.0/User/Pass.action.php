@@ -12,7 +12,7 @@ class User_Pass_Action extends Global_Action_Base {
             'key'     => 'phoneNum',
             'default' => '',
             'func'    => 'strval',
-            'regex'   => '/^\d{8,}$/',
+            'regex'   => '/^1\d{10}$/',
             'method'  => 'post',
         ],
         [
@@ -29,7 +29,7 @@ class User_Pass_Action extends Global_Action_Base {
             'key'     => 'phoneNum',
             'default' => '',
             'func'    => 'strval',
-            'regex'   => '/^\d{8,}$/',
+            'regex'   => '/^1\d{10}$/',
             'method'  => 'post',
         ],
         [
@@ -37,6 +37,16 @@ class User_Pass_Action extends Global_Action_Base {
             'default' => '',
             'func'    => 'strval',
             'regex'   => '/^\w{6,14}$/',
+            'method'  => 'post',
+        ],
+    ];
+
+    protected static $sendPhoneCodeParamsRule = [
+        [
+            'key'     => 'phoneNum',
+            'default' => '',
+            'func'    => 'strval',
+            'regex'   => '/^1\d{10}$/',
             'method'  => 'post',
         ],
     ];
@@ -72,6 +82,32 @@ class User_Pass_Action extends Global_Action_Base {
             }
 
             // TODO 登录成功之后redirect, 可以不写在api里, 放在web里更合适
+
+            $this->endWithResponseJson();
+        } catch(Exception $exception) {
+            $this->exception = $exception;
+            Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
+
+            $this->endWithResponseJson();
+        }
+    }
+
+    /**
+     * 发送验证码
+     */
+    public function sendPhoneCode() {
+        try {
+            $this->_checkParamsV2(self::$sendPhoneCodeParamsRule);
+
+            $phoneNum = $this->post['phoneNum'];
+
+            if(Message_Phone_Service::getInstance()->isFrequent($phoneNum, 'code')) {
+                throw new \Exception('request so frequent', Global_ErrorCode_Common::MESSAGE_REQUEST_FREQUENT);
+            }
+
+            if(!Message_Phone_Service::getInstance()->sendPhoneCode($phoneNum)) {
+                throw new \Exception('send phone code failed', Global_ErrorCode_Common::MESSAGE_SEND_PHONE_CODE_FAILED);
+            }
 
             $this->endWithResponseJson();
         } catch(Exception $exception) {

@@ -7,6 +7,10 @@ class Message_Phone_Service extends Global_Service_Base {
     public static function getInstance() {
         return parent::getInstance();
     }
+    
+    protected function __construct() {
+        $this->initRedis();
+    }
 
     /**
      * 发送手机短信
@@ -59,16 +63,40 @@ class Message_Phone_Service extends Global_Service_Base {
      * @return bool|string
      * @throws Exception
      */
-    public static function sendPhoneCode($phoneNum) {
+    public function sendPhoneCode($phoneNum) {
         if(!$phoneNum) {
             throw new \Exception('params error', Global_ErrorCode_Common::COMMON_PARAMS_ERROR);
         }
 
         $str       = '123456789456123789456789123987654321';
         $phoneCode = substr(str_shuffle($str), 0, 6);
-        $msg       = "您的验证码是: {$phoneCode} 请不要把验证码泄露给其他人";
-        if(self::sendMessage($phoneNum, $msg)) {
-            return $phoneCode;
+        $msg       = "您的验证码是: {$phoneCode} 验证码30分钟内有效, 请不要把验证码泄露给其他人.";
+        if(!self::sendMessage($phoneNum, $msg)) {
+            throw new \Exception('"send message failed"', Global_ErrorCode_Common::MESSAGE_SEND_MSG_FAILED);
+        }
+
+        // 记录发送flag
+        $msgType = "code";
+        $key     = sprintf(Global_CacheKey_KeyMap::MESSAGE_PHONE_MESSAGE_FLAG, $phoneNum, $msgType);
+        $ttl     = 60;
+        $this->redis->setex($key, $ttl, 1);
+
+        // 记录本次发送的验证码
+        $key = sprintf(Global_CacheKey_KeyMap::MESSAGE_PHONE_CODE, $phoneNum, $msgType);
+        $ttl = 1800;
+        $this->redis->setex($key, $ttl, $phoneCode);
+
+        return true;
+    }
+
+    /**
+     * 是否频繁发送
+     * @param $phoneNum
+     */
+    public function isFrequent($phoneNum, $msgType = 'code') {
+        $key = sprintf(Global_CacheKey_KeyMap::MESSAGE_PHONE_MESSAGE_FLAG, $phoneNum, $msgType);
+        if($this->redis->get($key)) {
+            return true;
         }
 
         return false;

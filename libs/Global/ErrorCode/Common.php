@@ -15,5 +15,11 @@ class Global_ErrorCode_Common {
     // mysql error
     const MYSQL_SELECT_ERROR = '001014';
 
+    // message相关
+    // 请求过于频繁, 请稍后再试
+    const MESSAGE_REQUEST_FREQUENT = '002001';
+    const MESSAGE_SEND_MSG_FAILED  = '002002';
+    const MESSAGE_SEND_PHONE_CODE_FAILED = '002003';
+
 
 }
