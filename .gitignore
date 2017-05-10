@@ -3,3 +3,4 @@
 templates_c
 log/
 !libs/Bingo/Log
+apps/actions/api/1.0/Test/
