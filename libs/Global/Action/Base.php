@@ -1,128 +1,45 @@
 <?php
 
-/**
- *
- *
- * @author  mozhuoying <mozhuoying@baidu.com>
- * @package bingo2.0
- * @since   2014-04-29
- *
- * @modify  gedejin <gedejin@baidu.com>
- * @time    2015-04-20
- * @todo    controller 基类
- */
 class Global_Action_Base {
-
-    protected $baseUserInfo = array();
-
+    /**
+     * @var array
+     */
     public $post;
+    /**
+     * @var array
+     */
     public $get;
-    public $request;
-    //会话信息，适配移动端
-    private $_sessionParams = array();
-    private $_sessionParamsKeys = array('CLIENT', 'DEVICEID', 'BDUSS', 'OS', 'OSVERSION', 'SID', 'DEVICE', 'TN', 'COUNTRY');
-    private $_sessionCookieKeys = array('BDUSS', 'SID', 'DEVICEID', 'TN', 'OS', 'CLIENT', 'OSVERSION', 'COUNTRY');
-    protected $errno = 0;
-    protected $errMsg = "";
-
     /**
      * @var Exception
      */
     public $exception = null;
+    /**
+     * @var int
+     */
+    protected $errno  = 0;
+    /**
+     * @var string
+     */
+    protected $errMsg = "";
 
     public function _before() {
-        $this->errno = Global_ErrorCode_Common::$COMMON_SUCCESS;
-        //初始化移动端参数
-        $this->_initMobileEnv();
     }
 
-    /**
-     * @todo 正则方式过滤参数
-     *
-     * @param array $paramsRule
-     *
-     * @throws Exception
-     */
-    public function _checkParams($paramsRule = array()) {
-        if (DEBUG) {
-            $this->_checkParamsRequest($paramsRule);
-            return;
-        }
-
-        if (empty($paramsRule) || !is_array($paramsRule)) {
-            $this->post = $_POST;
-            $this->get  = $_GET;
-        } else {
-            $get      = array();
-            $post     = array();
-            $security = new Global_Security_Base();
-            foreach ($paramsRule as $paramRule) {
-                $func = $paramRule['type'] == 'string' ? 'strval' : 'intval';
-                $temp = $func($_REQUEST[$paramRule["key"]]);
-                $temp = isset($temp) ? $paramRule["default"] : $temp;
-                $temp = ((isset($paramRule['min'])) ? ($temp > $paramRule['min'] ? $temp : $paramRule['default']) : $temp);
-                if (strtolower($paramRule["method"]) == "get") {
-                    if (preg_match($paramRule["regex"], $temp)) {
-                        $get[$paramRule["key"]] = $temp;
-                        //                        $get[$paramRule["key"]] = $security->xss_clean($temp);
-                    } else {
-                        if ($paramRule['isStrict']) {
-                            throw new Exception("Params error.", Global_ErrorCode_Common::$COMMON_PARAMS_ERROR);
-                        } else {
-                            $get[$paramRule["key"]] = $paramRule["default"];
-                        }
-                    }
-                } else {
-                    if (preg_match($paramRule["regex"], $temp)) {
-                        $post[$paramRule["key"]] = $temp;
-                        //                        $post[$paramRule["key"]] = $security->xss_clean($temp);
-                    } else {
-                        if ($paramRule['isStrict']) {
-                            throw new Exception("Params error.", Global_ErrorCode_Common::$COMMON_PARAMS_ERROR);
-                        } else {
-                            $get[$paramRule["key"]] = $paramRule["default"];
-                        }
-                    }
-
-                }
-            }
-
-            $this->get  = $get;
-            $this->post = $post;
-        }
+    public function _default() {
+        $this->errno  = $this->exception->getCode();
+        $this->errMsg = $this->exception->getMessage();
+        $result = array(
+            "message" => array(
+                "code"        => $this->errno,
+                "messageInfo" => $this->errMsg,
+            ),
+            'result'  => array(),
+        );
+        $this->renderJSON($result);
     }
 
-    /**
-     * @param array $paramsRules
-     *
-     * @return bool
-     * @throws Exception
-     */
-    private function _checkParamsRequest($paramsRules = []) {
-        if (empty($paramsRules) || !is_array($paramsRules)) {
-            $this->post = $_REQUEST;
-            $this->get  = $_REQUEST;
-            return true;
-        }
+    public function getLoginUserId($bduss = null) {
 
-        $params   = [];
-        $security = new Global_Security_Base();
-        foreach ($paramsRules as $paramRule) {
-            $func    = $paramRule['type'] == 'string' ? 'strval' : 'intval';
-            $default = isset($paramRule['default']) ? $func($paramRule['default']) : null;
-            $value   = isset($_REQUEST[$paramRule['key']]) ? $func($_REQUEST[$paramRule['key']]) : $default;
-            if ($paramRule['regex'] && !preg_match($paramRule['regex'], $value) && $paramRule['isStrict']) {
-                Bingo_Log::warning("regex: {$paramRule['regex']} key: {$paramRule['key']} value: $value", 'dal');
-                throw new Exception("Params error. param: $value", Global_ErrorCode_Common::$COMMON_PARAMS_ERROR);
-            }
-            //            $params[$paramRule['key']] = $security->xss_clean($value);
-            // app端屏蔽掉xss检测, web前端也做了兼容
-            $params[$paramRule['key']] = $value;
-        }
-        $this->post = $params;
-        $this->get  = $params;
-
-        return true;
     }
 
     /**
@@ -190,220 +107,6 @@ class Global_Action_Base {
         return true;
     }
 
-    /**
-     *方法的默认
-     *
-     * @param
-     *
-     * @return
-     */
-    public function _default() {
-        $this->errno  = $this->exception->getCode();
-        $this->errMsg = $this->exception->getMessage();
-        $result = array(
-            "message" => array(
-                "code"        => $this->errno,
-                "messageInfo" => $this->errMsg,
-            ),
-            'result'  => array(),
-        );
-        $this->renderJSON($result);
-    }
-
-    /**
-     * @param $val
-     */
-    public function renderJSON($val) {
-        if(isset($val['result'])) {
-            $this->tranceReturnInt2Str($val['result']);
-        }
-        $this->responseJSON($val);
-    }
-
-    /**
-     * @param $val
-     */
-    private function tranceReturnInt2Str(&$val) {
-        foreach ($val as &$unit) {
-            if (is_array($unit)) {
-                $this->tranceReturnInt2Str($unit);
-            } else {
-                if (is_numeric($unit)) {
-                    $unit = strval($unit);
-                } else {
-                    if (!is_numeric($unit)) {
-                        $unit = urldecode($unit);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * @param $val
-     */
-    public function responseJSON($val) {
-        header("Content-type:application/json; charset=utf-8");
-        if ($_REQUEST['CLIENT'] == 'mobile') {
-            $val['sessionData'] = $this->getSessionParamsAll();
-        }
-        echo json_encode($val);
-        $this->saveCostTime("", "api_cost", $val);
-        die;
-    }
-
-    /**
-     * @param $val
-     */
-    public function responseJSONMobile($val) {
-        header("Content-type:application/json; charset=utf-8");
-        $val['sessionData'] = $this->getSessionParamsAll();
-        echo json_encode($val);
-        $this->saveCostTime("", "api_cost");
-        die;
-    }
-
-    /**
-     * @param $val
-     */
-    public function responseJSONP($val) {
-        header("Content-type:application/json; charset=utf-8");
-
-        if ($_REQUEST['CLIENT'] == 'mobile') {
-            $val['sessionData'] = $this->getSessionParamsAll();
-        }
-        $jsonp = $_REQUEST['jsonp'];
-        if (!empty($jsonp)) {
-            echo $jsonp . "(" . json_encode($val) . ")";
-        } else {
-            echo json_encode(array("message" => "params jsonp error!"));
-        }
-        $this->saveCostTime();
-        die;
-    }
-
-    /**
-     * @param string $subFunctionName
-     * @param string $logFile
-     */
-    public function saveCostTime($subFunctionName = "main", $logFile = "api_cost") {
-        global $g_startTime;
-
-        $endTime = microtime(true);
-        $api     = $_SERVER["REQUEST_URI"];
-        $logInfo = "api:$api -- [$subFunctionName],costTime:" . ($endTime - $g_startTime);
-        Bingo_Log::notice($logInfo, $logFile);
-    }
-
-
-    /**
-     * @param     $error
-     * @param     $msg
-     * @param int $code
-     */
-    protected function _errorWithJSON($error, $msg, $code = 1) {
-        if (!$error) {
-            return;
-        }
-        Bingo_Log::warning($msg, 'dal');
-        $retVal          = array('status' => $code);
-        $retVal['error'] = $msg;
-        $this->renderJSON($retVal);
-        die;
-    }
-
-    /**
-     * @return null|bool
-     */
-    protected function _initMobileEnv() {
-        if ($_REQUEST['CLIENT'] != 'mobile') {
-            return true;
-        }
-
-        foreach ($this->_sessionParamsKeys as $k) {
-            $this->_sessionParams[$k] = isset($_REQUEST[$k]) ? $_REQUEST[$k] : '';
-        }
-
-        foreach ($this->_sessionCookieKeys as $k) {
-            if (!empty($this->_sessionParams[$k])) {
-                $_COOKIE[$k] = $this->_sessionParams[$k];
-            }
-        }
-    }
-
-    /**
-     * @param $k
-     * @param $v
-     */
-    protected function setSessionParams($k, $v) {
-        if (in_array($k, $this->_sessionParamsKeys)) {
-            $this->_sessionParams[$k] = $v;
-        }
-
-        if (in_array($k, $this->_sessionCookieKeys)) {
-            $_COOKIE[$k] = $v;
-        }
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSessionParamsAll() {
-        return $this->_sessionParams;
-    }
-
-    /**
-     * @param $code
-     *
-     * @return array
-     */
-    protected function getReturnMessage($code, $msg = null) {
-        return array(
-            "code"        => $code,
-            "messageInfo" => Global_ErrorLang_Common::getMessage($code, $msg),
-        );
-    }
-
-    /**
-     * @param null $bduss
-     *
-     * @return int|null
-     * @throws Exception
-     */
-    public function getLoginUserId($bduss = null) {
-        if ($_GET['muchaocheat'] && DEBUG) {
-            return $_GET['muchaocheat'];
-        }
-
-        if ($_GET['hhCheatId'] && DEBUG) {
-            return $_GET['hhCheatId'];
-        }
-
-        $passService = User_Passport_Service::getInstance();
-
-        if(is_null($bduss) && isset($_REQUEST['BDUSS'])) {
-            $bduss = $_REQUEST['BDUSS'];
-        }
-        if(is_null($bduss) && isset($_COOKIE['BDUSS'])) {
-            $bduss = $_COOKIE['BDUSS'];
-        }
-
-        Bingo_Log::notice("get login user userId. bduss: $bduss", 'dal');
-        if (!$bduss || !$passService->isLogin($bduss)) {
-            throw new Exception('need login', Global_ErrorCode_Common::COMMON_NEED_LOGIN);
-        }
-
-        $userId = $passService->getUidFromBduss($bduss);
-        if (!$userId) {
-            throw new Exception('need login', Global_ErrorCode_Common::COMMON_NEED_LOGIN);
-        }
-
-        return $userId;
-    }
-
-    /**
-     * @param $result
-     */
     public function endWithResponseJson($result = []) {
         header("Access-Control-Allow-Credentials: true");
         if(defined(DEBUG) && DEBUG === true) {
@@ -413,16 +116,28 @@ class Global_Action_Base {
         }
         if (is_null($this->exception)) {
             $res = array(
-                "message" => $this->getReturnMessage(Global_ErrorCode_Common::$COMMON_SUCCESS),
-                "result"  => $result,
+                "errNo"  => 0,
+                "errMsg" => "",
+                "result" => $result,
             );
         } else {
             $this->errno  = $this->exception->getCode();
             $this->errMsg = $this->exception->getMessage();
             $res          = array(
-                "message" => $this->getReturnMessage($this->errno, $this->errMsg),
+                "errNo"  => $this->exception->getCode() ?: 500,
+                "errMsg" => $this->exception->getMessage() ?: "Internal error",
+                "result" => $result,
             );
         }
         $this->renderJSON($res);
+    }
+
+    /**
+     * @param $val
+     */
+    public function renderJSON($val) {
+        header("Content-type:application/json; charset=utf-8");
+        echo json_encode($val);
+        exit;
     }
 }

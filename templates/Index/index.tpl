@@ -19,7 +19,9 @@
 <body>
     <div class="container">
             <h1>Hello world!</h1>
-            <h1>Hello dd!</h1>
+            <%foreach $tplData as $key => $value%>
+                <h1><%$key%> => <%$value%></h1>
+            <%/foreach%>
     </div>
 </body>
 </html>
