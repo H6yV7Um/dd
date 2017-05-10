@@ -71,7 +71,7 @@ class Global_Env {
      * @return
      */
     public static function init($action_type = "api") {
-//        self::_initSession();
+        self::_initSession();
         self::$host = $_SERVER['HTTP_HOST'];
         $uri        = self::_getUriStr();
         self::_init_Bingo();
