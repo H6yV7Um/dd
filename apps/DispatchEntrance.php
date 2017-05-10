@@ -39,7 +39,7 @@ class DispatchEntrance extends Bingo_Action_Abstract {
                     $this->_callmethod($objController, $this->action, Global_Env::$cli_param);
                 }
             } else {
-                throw new BadMethodCallException($this->actionPath . "--" . $this->action . " action not exists");
+                throw new BadMethodCallException("action is not exists", 500);
             }
 
             //方法之后调用函数

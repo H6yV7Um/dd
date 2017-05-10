@@ -39,10 +39,51 @@ class User_Model extends Base_Model {
 
     public function isPhoneExists($phoneNum) {
         $cond = [
-            "PhoneNum = " => $phoneNum,
+            "phoneNum = " => $phoneNum,
         ];
-        $res  = User_Model::getInstance()->selectCount($this->table, $cond);
+        $res  = $this->selectCount($this->table, $cond);
 
         return $res ? true : false;
+    }
+
+    /**
+     * 验证用户登录
+     * @param $phoneNum
+     * @param $password
+     * @return bool|array
+     */
+    public function authUser($phoneNum, $password) {
+        $fields = [
+            "userId",
+            "password",
+            "username",
+            "pwdStr",
+            "userIcon",
+            "gender",
+            "birthDay",
+            "phoneNum",
+            "email",
+            "address",
+            "detailAddress",
+        ];
+        $cond = [
+            "phoneNum = " => $phoneNum,
+        ];
+        $res = $this->selectOne($this->table, $fields, $cond);
+        if(!$res) {
+            return false;
+        }
+
+        if(md5($password . $res['pwdStr']) != $res['password']) {
+            return false;
+        }
+
+        unset($res['password']);
+        unset($res['pwdStr']);
+        return $res;
+    }
+
+    public function getUserInfo() {
+
     }
 }
