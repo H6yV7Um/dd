@@ -15,6 +15,8 @@ class Global_ErrorCode_Common {
     // mysql error
     const MYSQL_SELECT_ERROR = '001014';
 
+    // 为登录
+    const USER_NOT_LOGIN = '001000';
     // 注册参数错误
     const USER_PARAMS_ERROR                = '001001';
     // 用户已注册

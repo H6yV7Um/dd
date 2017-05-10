@@ -139,6 +139,24 @@ class User_Pass_Action extends Global_Action_Base {
     }
 
     /**
+     * 登出
+     */
+    public function logout() {
+        try {
+            User_Pass_Service::getLoginUserId();
+
+            User_Pass_Service::getInstance()->logout();
+            
+            $this->endWithResponseJson();
+        } catch(Exception $exception) {
+            $this->exception = $exception;
+            Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
+            
+            $this->endWithResponseJson();   
+        }
+    }
+
+    /**
      * 发送验证码
      */
     public function sendPhoneCode() {
@@ -187,9 +205,9 @@ class User_Pass_Action extends Global_Action_Base {
                 throw new \Exception('reset pwd failed', Global_ErrorCode_Common::USER_RESET_PWD_FAILED);
             }
 
-            // TODO 登出之前的会话
-
-
+            // 登出之前的会话
+            User_Pass_Service::getInstance()->logout();
+            
             $this->endWithResponseJson();
         } catch(Exception $exception) {
             $this->exception = $exception;

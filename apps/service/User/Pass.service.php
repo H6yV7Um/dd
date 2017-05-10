@@ -16,6 +16,27 @@ class User_Pass_Service extends Global_Service_Base {
     }
 
     /**
+     * 获取登录用户Id
+     * @throws Exception
+     */
+    public static function getLoginUserId() {
+        $token = $_COOKIE['dd_token'];
+
+        try {
+            $userId = self::validateToken($token);
+        } catch(Exception $e) {
+            $userId = 0;
+            Bingo_Log::warning("decode token error. errNo: {$e->getCode()} errMsg: {$e->getMessage()}");
+        }
+
+        if(!$userId) {
+            throw new \Exception('need login first', Global_ErrorCode_Common::USER_NOT_LOGIN);
+        }
+
+        return $userId;
+    }
+
+    /**
      * 用户注册
      * @param $params
      * @return bool
@@ -65,9 +86,16 @@ class User_Pass_Service extends Global_Service_Base {
 
         // 登录成功, 以uid为基础生成会话token
         $token = $this->createToken($userInfo['userId'], self::USER_SESSION_EXPIRED_TIME);
-        setcookie("dd_token", $token);
+        setcookie("dd_token", $token, 0, '/');
 
         return true;
+    }
+
+    /**
+     * 登出
+     */
+    public function logout() {
+        setcookie("dd_token", '', time() - 3600, '/');
     }
 
 
@@ -127,8 +155,7 @@ class User_Pass_Service extends Global_Service_Base {
      * @return string
      * @throws Exception
      */
-    public static function validateToken($token, $endTime = null, $key = self::TOKEN_SECRET_KEY)
-    {
+    public static function validateToken($token, $endTime = null, $key = self::TOKEN_SECRET_KEY) {
         if(!$token || !$key) {
             throw new \Exception('params error', Global_ErrorCode_Common::COMMON_PARAMS_ERROR);
         }
