@@ -63,7 +63,7 @@ class Message_Phone_Service extends Global_Service_Base {
      * @return bool|string
      * @throws Exception
      */
-    public function sendPhoneCode($phoneNum) {
+    public function sendPhoneCode($phoneNum, $codeType = 'register') {
         if(!$phoneNum) {
             throw new \Exception('params error', Global_ErrorCode_Common::COMMON_PARAMS_ERROR);
         }
@@ -76,13 +76,12 @@ class Message_Phone_Service extends Global_Service_Base {
         }
 
         // 记录发送flag
-        $msgType = "code";
-        $key     = sprintf(Global_CacheKey_KeyMap::MESSAGE_PHONE_MESSAGE_FLAG, $phoneNum, $msgType);
+        $key     = sprintf(Global_CacheKey_KeyMap::MESSAGE_PHONE_MESSAGE_FLAG, $phoneNum, $codeType);
         $ttl     = 60;
         $this->redis->setex($key, $ttl, 1);
 
         // 记录本次发送的验证码
-        $key = sprintf(Global_CacheKey_KeyMap::MESSAGE_PHONE_CODE, $phoneNum, $msgType);
+        $key = sprintf(Global_CacheKey_KeyMap::MESSAGE_PHONE_CODE, $phoneNum, $codeType);
         $ttl = 1800;
         $this->redis->setex($key, $ttl, $phoneCode);
 
@@ -93,12 +92,26 @@ class Message_Phone_Service extends Global_Service_Base {
      * 是否频繁发送
      * @param $phoneNum
      */
-    public function isFrequent($phoneNum, $msgType = 'code') {
-        $key = sprintf(Global_CacheKey_KeyMap::MESSAGE_PHONE_MESSAGE_FLAG, $phoneNum, $msgType);
+    public function isFrequent($phoneNum, $codeType = 'register') {
+        $key = sprintf(Global_CacheKey_KeyMap::MESSAGE_PHONE_MESSAGE_FLAG, $phoneNum, $codeType);
         if($this->redis->get($key)) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * 验证验证码是否正常
+     * @param $phoneNum
+     * @param $phoneCode
+     * @param string $codeType
+     * @return bool
+     */
+    public function validateCode($phoneNum, $phoneCode, $codeType = 'register') {
+        $key = sprintf(Global_CacheKey_KeyMap::MESSAGE_PHONE_CODE, $phoneNum, $codeType);
+        $res = $this->redis->get($key);
+
+        return $res == $phoneCode;
     }
 }

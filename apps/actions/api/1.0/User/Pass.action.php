@@ -22,6 +22,13 @@ class User_Pass_Action extends Global_Action_Base {
             'regex'   => '/^\w{6,14}$/',
             'method'  => 'post',
         ],
+        [
+            'key'     => 'phoneCode',
+            'default' => '',
+            'func'    => 'strval',
+            'regex'   => '/^\d{6}$/',
+            'method'  => 'post',
+        ],
     ];
 
     protected static $loginParamsRule = [
@@ -49,6 +56,13 @@ class User_Pass_Action extends Global_Action_Base {
             'regex'   => '/^1\d{10}$/',
             'method'  => 'post',
         ],
+        [
+            'key'     => 'codeType',
+            'default' => 'register',
+            'func'    => 'strval',
+            'regex'   => '/^(register|resetPwd)$/',
+            'method'  => '',
+        ],
     ];
 
     /**
@@ -58,6 +72,13 @@ class User_Pass_Action extends Global_Action_Base {
         try {
             $this->_checkParamsV2(self::$registerParamsRule);
 
+            // 验证码校验
+            $res = Message_Phone_Service::getInstance()->validateCode($this->post['phoneNum'], $this->post['phoneCode']);
+            if(!$res) {
+                throw new \Exception('phone code is invalid', Global_ErrorCode_Common::USER_PHONE_CODE_ERROR);
+            }
+
+            // 注册
             $res = User_Pass_Service::getInstance()->register($this->post);
             if(!$res) {
                 throw new \Exception('register failed', Global_ErrorCode_User::USER_REG_FAILED);
@@ -72,6 +93,9 @@ class User_Pass_Action extends Global_Action_Base {
         }
     }
 
+    /**
+     * 登录
+     */
     public function login() {
         try {
             $this->_checkParamsV2(self::$loginParamsRule);
@@ -80,8 +104,6 @@ class User_Pass_Action extends Global_Action_Base {
             if(!$res) {
                 throw new \Exception('login failed', Global_ErrorCode_User::USER_LOGIN_FAILED);
             }
-
-            // TODO 登录成功之后redirect, 可以不写在api里, 放在web里更合适
 
             $this->endWithResponseJson();
         } catch(Exception $exception) {
@@ -100,8 +122,9 @@ class User_Pass_Action extends Global_Action_Base {
             $this->_checkParamsV2(self::$sendPhoneCodeParamsRule);
 
             $phoneNum = $this->post['phoneNum'];
+            $codeType = $this->post['codeType'];
 
-            if(Message_Phone_Service::getInstance()->isFrequent($phoneNum, 'code')) {
+            if(Message_Phone_Service::getInstance()->isFrequent($phoneNum, $codeType)) {
                 throw new \Exception('request so frequent', Global_ErrorCode_Common::MESSAGE_REQUEST_FREQUENT);
             }
 

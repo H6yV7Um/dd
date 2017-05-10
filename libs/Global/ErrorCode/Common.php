@@ -15,6 +15,23 @@ class Global_ErrorCode_Common {
     // mysql error
     const MYSQL_SELECT_ERROR = '001014';
 
+    // 注册参数错误
+    const USER_PARAMS_ERROR                = '001001';
+    // 用户已注册
+    const USER_ALREADY_REGISTER            = '001002';
+    // 注册失败
+    const USER_REG_FAILED                  = '001003';
+    // 登录失败
+    const USER_LOGIN_FAILED                  = '001004';
+    // 登出失败
+    const USER_LOGOUT_FAILED                 = '001005';
+    // 更新用户信息失败
+    const USER_SET_USER_INFO_FAILED          = '001006';
+    // 用户不存在
+    const USER_NOT_EXISTS                    = '001007';
+    // 验证码错误
+    const USER_PHONE_CODE_ERROR = '001008';
+
     // message相关
     // 请求过于频繁, 请稍后再试
     const MESSAGE_REQUEST_FREQUENT = '002001';
