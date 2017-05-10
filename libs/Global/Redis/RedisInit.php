@@ -40,21 +40,6 @@ class Global_Redis_RedisInit extends Global_Balance_Base {
     }
 
     /**
-     * 工厂函数，制造redis封装类
-     *
-     * @param
-     *
-     * @return
-     */
-    public static function factory($dbName = 'cache') {
-        return new Global_Redis_RedisInit($dbName);
-        if (empty(self::$redisInsList[$dbName])) {
-            self::$_instanceList[$dbName] = new Global_Redis_RedisInit($dbName);
-        }
-        return self::$_instanceList[$dbName];
-    }
-
-    /**
      * Redis连接方法
      *
      * @param

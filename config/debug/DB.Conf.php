@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'HiClubApp' => array(
+    'dd' => array(
         'host'     => 'localhost',
         'port'     => '3306',
         'dbname'   => 'dd',

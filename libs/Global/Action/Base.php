@@ -91,7 +91,7 @@ class Global_Action_Base {
             // regex filter
             if (isset($paramRule['regex']) && $paramRule['regex'] && !preg_match($paramRule['regex'], $value)) {
                 Bingo_Log::warning("regex: {$paramRule['regex']} key: {$paramRule['key']} value: $value", 'dal');
-                throw new Exception("Params error. param: $value don't match the regex.", Global_ErrorCode_Common::COMMON_PARAMS_ERROR);
+                throw new Exception("Params error. key: [{$paramRule['key']}] value: [$value], param don't match the regex [{$paramRule['regex']}].", Global_ErrorCode_Common::COMMON_PARAMS_ERROR);
             }
 
             if($isGet) {

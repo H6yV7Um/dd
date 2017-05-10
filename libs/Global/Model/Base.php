@@ -23,7 +23,7 @@ class Global_Model_Base extends Bd_DB {
      * @param
      * @return
      */
-    public static function getInstance($insName = 'HiClubApp') {
+    public static function getInstance($insName = 'dd') {
         if (!isset(self::$_instanceList[$insName]) || !self::$_instanceList[$insName]) {
             self::$_instanceList[$insName] = new Global_Model_Base($insName);
         }
