@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest version="1.0">
+    <name>passport</name>
+    <friendly-name>passport</friendly-name>
+    <summary><![CDATA[passport库]]></summary>
+    <version>1.0.14.0</version>
+    <catalog>common</catalog>
+    <context>online</context>
+    <vendor>
+        <id>passport</id>
+        <name>passport</name>
+        <mail>pass-rd@baidu.com</mail>
+    </vendor>
+    <author>
+        <name>fanmengzhe</name>
+        <mail>fanmengzhe@baidu.com</mail>
+    </author>
+</manifest>

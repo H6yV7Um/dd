@@ -1,0 +1,50 @@
+欢迎使用passport服务！
+
+1.首先请您了解passport为各产品线提供的服务。
+1.1 Session
+	Session为用户在线状态验证系统，应用场景为判断一个session是否在线，按uid查询在线信息，统一安全认证。
+
+1.1.1 Session可以返回哪些字段？
+	目前，Session仅返回uid，uname作为什么标识，其他信息请通过Dbstore查询。
+
+1.2 Dbstore
+1.2.1 pusrinfo
+	pusrinfo提供用户信息查询服务，支持http和socket接口。
+	由于历史悠久，新入passport服务不允许使用，仅为老产品线兼容。
+
+1.2.2 passgate
+	passgate设计用于替换pusrinfo提供用户信息查询服务。
+
+
+2. 新产品线如何接入passport服务？
+	从现在起，passport为每个新接入passport服务（仅session和userinfo，开放平台不在本lib支持范围）的产品线，
+分配apid（session查询服务的产品线身份标识），tpl（产品线缩写，建议2个字符，由产品线提供），app_user（用户
+信息查询服务的产品线标识，建议为产品线缩写，由产品线提供），app_passwd（app_user对应的密码，由产品线提供）。
+
+	欲申请使用pass服务，请发邮件给pass-all@baidu.com。在邮件中，请按照以下示例填写：
+
+	主题： xxx 产品线申请使用passport服务
+	收件人： pass-all@baidu.com
+	正文：
+		
+		产品线： （例如：百度知道）
+		接口人RD：	jack@baidu.com
+		接口人PM：	jones@baidu.com
+		使用服务及流量预估：	session	2亿PV/天
+		欲使用tpl： ik
+		欲使用app_user： iknow
+		欲使用app_passwd： iknow
+
+	
+	passport方面会在一个工作日内受理你的申请。并将产品线信息更新到rdtest（rd稳定联调环境），qatest（qa稳定联调
+环境）和线上环境。注：这仅是产品线信息，并非产品线集群的授权。
+
+	rd开发时请到 http://passport.sys.baidu.com/authorize/ 申请相关系统的权限（自动授权，无需审批）。
+
+	qa联调时请遵循pass-qa外产品线联调流程。
+
+	上线时请到 http://tc-passport-op00.tc.baidu.com/authorize/ 申请相关系统的权限，由pass-op审批。
+
+
+3. 后记
+	如使用中有任何问题，欢迎发邮件至pass-help@baidu.com，我们将在一个工作日内为您搞定。

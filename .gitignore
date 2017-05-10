@@ -1,0 +1,5 @@
+.DS_Store
+.idea
+./templates_c
+log/
+!libs/Bingo/Log

@@ -1,0 +1,20 @@
+pkgname=odp-passport
+pkgver=1.0.14.0
+pkgrel=1
+pkgdesc="ODP plugin - passport"
+depends=("odp-php" "odp-php-ral") # missdepends=()
+sources=("${JUMBO_REPO}/packages/${pkgname}/${pkgname}_${pkgver//./-}.tar.gz")
+backups=("conf/passport.conf"
+         "conf/ral/services/passport.conf")
+md5sums=("")
+
+jumbo_install() {
+  cd "${srcdir}"
+
+  ODP_ROOT="${JUMBO_ROOT}"
+
+  install -dm755 "${pkgdir}/${ODP_ROOT}"
+  tar -xzf "${pkgname}_${pkgver//./-}.tar.gz" -C "${pkgdir}/${ODP_ROOT}"
+}
+
+# vim:set ft=sh ts=2 sw=2 et:

@@ -1,0 +1,66 @@
+1.0.14.0	2014-04-15
+	* add: 绑定控件，绑定信息查询
+
+1.0.13.0	2013-11-01
+	* add: 手机邮箱模糊化工具
+
+1.0.12.0	2013-09-22
+	* add: 绑定控件
+	* mod: 验证控件新增动态口令验证，二维码验证，一键验证，码验证
+
+1.0.11.0	2013-07-15
+	* add: SAPI
+	* add: 验证控件
+
+1.0.10.0	2013-04-22
+	* fix: checkUserLogin 加入incomplete_user 参数 表明半账号
+
+1.0.9.0	2013-04-17
+	* add: 半账号接口升级
+
+1.0.8.6	2013-04-11
+	* add: 半账号接口升级
+	* mod: getdata和authgetdata接口参数
+	* mod: 解gdata数据接口
+
+1.0.7.0	2013-02-25
+	* add: 升级jumbo支持 添加odp-passport.jumbo文件
+	* mod: 修改编译依赖库plugin-packer版本至1.0.2.1
+
+1.0.6.4	2012-12-27
+	* new: 修正与SAF的接口
+
+1.0.6.3	2012-12-20
+	* new: 修复bug，wpass类使用了未定义变量
+
+1.0.6.2	2012-12-20
+	* new: 修复bug，wpass类使用了未定义变量
+
+1.0.6.1	2012-11-02
+	* new: 增加wappass功能点: get_bduss_by_ssid, ral.conf
+	* new: 版本要求ral.so >= 1.1.0
+
+1.0.6.0	2012-09-11
+	* new: 增加passport.conf配置项: psptoken_key_crypt, psptoken_key_csrf
+	* new: 增加getConf, decryptPSPToken
+
+1.0.5.0	2012-09-11
+	* new: psptoken解密(原术语：stoken)
+	* new: 增加encryptURL, decryptURL
+
+1.0.4.0	2012-08-17
+	* mod: 更新plugin-packer依赖
+	* mod: 更新./conf/ral/services/passport.conf为UTF-8
+
+1.0.3.0	2012-05-18
+	* fix: 修正checkUserLogin逻辑
+
+1.0.2.0	2012-05-16
+	* new: Merge features in inf/odp/lib-bdsvc/passport v1.0.5.0 .
+	* new: Support running on orp.
+
+1.0.1.0	2011-12-21
+	* fix: 取消对Bd_Log::init()的调用，该接口已废弃
+
+1.0.0.0	2011-11-20
+	* new: passport库
