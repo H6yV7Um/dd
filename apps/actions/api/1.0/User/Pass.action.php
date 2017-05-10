@@ -61,7 +61,31 @@ class User_Pass_Action extends Global_Action_Base {
             'default' => 'register',
             'func'    => 'strval',
             'regex'   => '/^(register|resetPwd)$/',
-            'method'  => '',
+            'method'  => 'post',
+        ],
+    ];
+
+    protected static $resetPwdParamsRule = [
+        [
+            'key'     => 'phoneNum',
+            'default' => '',
+            'func'    => 'strval',
+            'regex'   => '/^1\d{10}$/',
+            'method'  => 'post',
+        ],
+        [
+            'key'     => 'password',
+            'default' => '',
+            'func'    => 'strval',
+            'regex'   => '/^\w{6,14}$/',
+            'method'  => 'post',
+        ],
+        [
+            'key'     => 'phoneCode',
+            'default' => '',
+            'func'    => 'strval',
+            'regex'   => '/^\d{6}$/',
+            'method'  => 'post',
         ],
     ];
 
@@ -128,9 +152,43 @@ class User_Pass_Action extends Global_Action_Base {
                 throw new \Exception('request so frequent', Global_ErrorCode_Common::MESSAGE_REQUEST_FREQUENT);
             }
 
-            if(!Message_Phone_Service::getInstance()->sendPhoneCode($phoneNum)) {
+            if(!Message_Phone_Service::getInstance()->sendPhoneCode($phoneNum, $codeType)) {
                 throw new \Exception('send phone code failed', Global_ErrorCode_Common::MESSAGE_SEND_PHONE_CODE_FAILED);
             }
+
+            $this->endWithResponseJson();
+        } catch(Exception $exception) {
+            $this->exception = $exception;
+            Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
+
+            $this->endWithResponseJson();
+        }
+    }
+
+    /**
+     * 重置密码
+     */
+    public function resetPwd() {
+        try {
+            $this->_checkParamsV2(self::$resetPwdParamsRule);
+
+            // 验证码校验
+            $phoneNum  = $this->post['phoneNum'];
+            $password  = $this->post['password'];
+            $phoneCode = $this->post['phoneCode'];
+            $msgType   = 'resetPwd';
+            $res = Message_Phone_Service::getInstance()->validateCode($phoneNum, $phoneCode, $msgType);
+            if(!$res) {
+                throw new \Exception('phone code is invalid', Global_ErrorCode_Common::USER_PHONE_CODE_ERROR);
+            }
+
+            $res = User_Pass_Service::getInstance()->resetPwd($phoneNum, $password);
+            if(!$res) {
+                throw new \Exception('reset pwd failed', Global_ErrorCode_Common::USER_RESET_PWD_FAILED);
+            }
+
+            // TODO 登出之前的会话
+
 
             $this->endWithResponseJson();
         } catch(Exception $exception) {

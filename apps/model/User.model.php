@@ -86,4 +86,25 @@ class User_Model extends Base_Model {
     public function getUserInfo() {
 
     }
+
+    /**
+     * 修改密码
+     * @param $phoneNum
+     * @param $password
+     * @param $pwdStr
+     * @return bool
+     */
+    public function changePwd($phoneNum, $password, $pwdStr) {
+        $fields = [
+            'phoneNum' => $phoneNum,
+            'password' => $password,
+            'pwdStr'   => $pwdStr,
+        ];
+        $cond = [
+            "phoneNum = " => $phoneNum,
+        ];
+        $res = $this->update($this->table, $fields, $cond);
+        
+        return $res ? true : false;
+    }
 }

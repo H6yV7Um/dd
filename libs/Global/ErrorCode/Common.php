@@ -31,6 +31,8 @@ class Global_ErrorCode_Common {
     const USER_NOT_EXISTS                    = '001007';
     // 验证码错误
     const USER_PHONE_CODE_ERROR = '001008';
+    const USER_CHANGE_PWD_FAILED = '001009';
+    const USER_RESET_PWD_FAILED = '001010';
 
     // message相关
     // 请求过于频繁, 请稍后再试

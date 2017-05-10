@@ -72,6 +72,31 @@ class User_Pass_Service extends Global_Service_Base {
 
 
     /**
+     * 重置密码
+     * @param $phoneNum
+     * @param $password
+     * @return bool
+     * @throws Exception
+     */
+    public function resetPwd($phoneNum, $password) {
+        // 用户是否存在
+        if(!User_Model::getInstance()->isPhoneExists($phoneNum)) {
+            throw new \Exception('phone is not register', Global_ErrorCode_Common::USER_NOT_EXISTS);
+        }
+
+        // 随机密码字符串
+        $str = "abcdefghijklmnopqrestuvwxyz1234567890ABCDEFGHIJKLMNOPQRESTUVWXYZ";
+        $pwdStr = substr(str_shuffle($str), 0, 6);
+        $password = md5($password . $pwdStr);
+        if(!User_Model::getInstance()->changePwd($phoneNum, $password, $pwdStr)) {
+            throw new \Exception('change password failed', Global_ErrorCode_Common::USER_CHANGE_PWD_FAILED);
+        }
+
+        return true;
+    }
+
+
+    /**
      * 加密数据
      * @param $msg
      * @param string $key
