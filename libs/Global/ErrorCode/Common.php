@@ -35,6 +35,8 @@ class Global_ErrorCode_Common {
     const USER_PHONE_CODE_ERROR = '001008';
     const USER_CHANGE_PWD_FAILED = '001009';
     const USER_RESET_PWD_FAILED = '001010';
+    const USER_COLL_FAILED = '001011';
+    const USER_ALREADY_COLL = '001012';
 
     // message相关
     // 请求过于频繁, 请稍后再试
@@ -53,6 +55,7 @@ class Global_ErrorCode_Common {
     const RECRUIT_DELETE_BASE_FAILED = '004005';
     const RECRUIT_DELETE_RECRUIT_FAILED = '004006';
     const RECRUIT_DELETE_FAILED = '004007';
+    const INFORMATION_INFO_NOT_EXISTS = '004008';
 
     const FILE_UPLOAD_FILE_NAME_ERROR = '007001';
     const FILE_UPLOAD_RECEIVE_FILED_ERROR = '007002';
