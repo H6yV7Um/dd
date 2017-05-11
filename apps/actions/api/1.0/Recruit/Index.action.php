@@ -97,8 +97,24 @@ class Recruit_Index_Action extends Global_Action_Base {
         ],
     ];
 
+    protected static $getRecruitListParamsRule = [
+        [
+            'key'     => 'catId',
+            'func'    => 'intval',
+            'regex'   => '/^\d+$/',
+            'method'  => 'get',
+        ],
+        [
+            'key'     => 'page',
+            'default' => '1',
+            'func'    => 'intval',
+            'regex'   => '/^\d+$/',
+            'method'  => 'get',
+        ],
+    ];
+
     /**
-     *
+     * 处理发布行为
      */
     public function publish() {
         try {
@@ -121,6 +137,23 @@ class Recruit_Index_Action extends Global_Action_Base {
             Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
             
             $this->endWithResponseJson();   
+        }
+    }
+
+    public function getRecruitList() {
+        try {
+            $this->_checkParamsV2(self::$getRecruitListParamsRule);
+
+            $catId = $this->get['catId'];
+            $page  = $this->get['page'];
+            $recruitList = Recruitment_Index_Service::getInstance()->getRecruitList($catId, $page);
+
+            $this->endWithResponseJson($recruitList);
+        } catch(Exception $exception) {
+            $this->exception = $exception;
+            Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
+
+            $this->endWithResponseJson();
         }
     }
 }

@@ -61,4 +61,25 @@ class Recruitment_Index_Service extends Global_Service_Base {
 
         return true;
     }
+
+    /**
+     * 获取兼职列表
+     * @param $catId
+     * @param $page
+     * @return array
+     */
+    public function getRecruitList($catId, $page) {
+        $recruitList = Information_Model::getInstance()->getRecruitList($catId, $page);
+        if(!$recruitList) {
+            return [];
+        }
+
+        foreach($recruitList as &$value) {
+            $userInfo = User_Model::getInstance()->getUserInfo($value['userId']);
+            $value['username'] = $userInfo ? $userInfo['username'] : "";
+            $value['address'] = Information_Model::getInstance()->getAddressByCode($value['address']);
+        }
+
+        return $recruitList;
+    }
 }

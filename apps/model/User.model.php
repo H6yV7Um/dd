@@ -83,10 +83,6 @@ class User_Model extends Base_Model {
         return $res;
     }
 
-    public function getUserInfo() {
-
-    }
-
     /**
      * 修改密码
      * @param $phoneNum
@@ -104,7 +100,31 @@ class User_Model extends Base_Model {
             "phoneNum = " => $phoneNum,
         ];
         $res = $this->update($this->table, $fields, $cond);
-        
+
         return $res ? true : false;
+    }
+
+    /**
+     * @param $userId
+     * @return array
+     */
+    public function getUserInfo($userId) {
+        $fields = [
+            "userId",
+            "username",
+            "userIcon",
+            "gender",
+            "birthDay",
+            "phoneNum",
+            "email",
+            "address",
+            "detailAddress",
+        ];
+        $cond = [
+            "userId = " => $userId,
+        ];
+        $res = $this->selectOne($this->table, $fields, $cond);
+
+        return $res ?: [];
     }
 }

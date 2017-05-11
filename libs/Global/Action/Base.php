@@ -69,14 +69,14 @@ class Global_Action_Base {
 
             // get value
             $key = $paramRule['key'];
-            if(!isset($requestParams[$key]) && !isset($requestParams['default'])) {
+            if(!isset($requestParams[$key]) && !isset($paramRule['default'])) {
                 Bingo_Log::warning("Params error. param '$key' is needed.", 'dal');
                 throw new Exception("Params error. param '$key' is needed.", Global_ErrorCode_Common::COMMON_PARAMS_ERROR);
             }
             if(isset($requestParams[$key])) {
                 $value = $requestParams[$key];
             } else {
-                $value = $requestParams['default'];
+                $value = $paramRule['default'];
             }
 
             // function handler
