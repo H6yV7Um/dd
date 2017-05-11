@@ -95,6 +95,21 @@ class Recruitment_Index_Service extends Global_Service_Base {
             return [];
         }
 
+        if($recruitInfo['salaryType']) {
+            $recruitInfo['salary'] /= 10;
+        } else {
+            $recruitInfo['salary'] = 0;
+        }
+        $salaryType = [
+            '0' => '面议',
+            '1' => '小时',
+            '2' => '日',
+            '3' => '周',
+            '4' => '月',
+            '5' => '年',
+        ];
+        $recruitInfo['salaryType'] = $salaryType[$recruitInfo['salaryType']];
+
         return array_merge($baseInfo, $recruitInfo);
     }
 
