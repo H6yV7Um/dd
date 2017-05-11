@@ -156,4 +156,35 @@ class Information_Model extends Base_Model {
 
         return $res ? true : false;
     }
+
+    public function getPubList($userId, $catIds, $page) {
+        $fields = [
+            'infoId',
+            'catId',
+            'userId',
+            'title',
+            'image',
+            'content',
+            'demand',
+            'extra',
+            'address',
+            'detailAddress',
+            'contact',
+            'phoneNum',
+            'createdTime',
+        ];
+        $strIds = implode(',', $catIds);
+        $cond = [
+            "userId = " => $userId,
+            "catId IN ($strIds)",
+        ];
+
+        $perPage = self::INFO_PER_PAGE_SIZE;
+        $offset = ($page - 1) * $perPage;
+        $append = "ORDER BY createdTime DESC LIMIT $offset, $perPage";
+
+        $pubList = $this->select($this->table, $fields, $cond, $append);
+
+        return $pubList ?: [];
+    }
 }
