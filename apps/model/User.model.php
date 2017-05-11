@@ -76,9 +76,7 @@ class User_Model extends Base_Model {
             "address",
             "detailAddress",
         ];
-        $cond = [
-            "phoneNum = " => $phoneNum,
-        ];
+        $cond = "phoneNum = '$phoneNum' OR username = '$phoneNum'";
         $res = $this->selectOne($this->table, $fields, $cond);
         if(!$res) {
             return false;

@@ -43,7 +43,7 @@ class User_Pass_Action extends Global_Action_Base {
             'key'     => 'phoneNum',
             'default' => '',
             'func'    => 'strval',
-            'regex'   => '/^1\d{10}$/',
+            'regex'   => '/^.*$/',
             'method'  => 'post',
         ],
         [
