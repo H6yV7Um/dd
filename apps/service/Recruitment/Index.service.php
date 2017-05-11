@@ -33,7 +33,7 @@ class Recruitment_Index_Service extends Global_Service_Base {
             'phoneNum'    => $params['phoneNum'],
             'createdTime' => $currTime,
         ];
-        $lastInsertId = Information_Model::getInstance()->createInfo($baseData);
+        $lastInsertId = Information_Model::getInstance()->createBase($baseData);
         if(!$lastInsertId) {
             Information_Model::getInstance()->rollBack();
             throw new \Exception('create info failed', Global_ErrorCode_Common::RECRUIT_CREATE_BASE_DATA_FAILED);
@@ -96,5 +96,25 @@ class Recruitment_Index_Service extends Global_Service_Base {
         }
 
         return array_merge($baseInfo, $recruitInfo);
+    }
+
+    public function delRecruit($userId, $infoId) {
+        Information_Model::getInstance()->startTransaction();
+
+        $res = Information_Model::getInstance()->delBase($userId, $infoId);
+        if(!$res) {
+            Information_Model::getInstance()->rollBack();
+            throw new \Exception('del base failed', Global_ErrorCode_Common::RECRUIT_DELETE_BASE_FAILED);
+        }
+
+        $res = Recruitment_Model::getInstance()->delRecruit($infoId);
+        if(!$res) {
+            Information_Model::getInstance()->rollBack();
+            throw new \Exception('del recruit failed', Global_ErrorCode_Common::RECRUIT_DELETE_RECRUIT_FAILED);
+        }
+
+        Information_Model::getInstance()->commit();
+
+        return true;
     }
 }

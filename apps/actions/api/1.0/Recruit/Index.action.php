@@ -122,6 +122,15 @@ class Recruit_Index_Action extends Global_Action_Base {
         ],
     ];
 
+    protected static $deleteParamsRule = [
+        [
+            'key'     => 'infoId',
+            'func'    => 'strval',
+            'regex'   => '/^\d+$/',
+            'method'  => 'post',
+        ],
+    ];
+
     /**
      * 处理发布行为
      */
@@ -149,6 +158,9 @@ class Recruit_Index_Action extends Global_Action_Base {
         }
     }
 
+    /**
+     * 列表
+     */
     public function getRecruitList() {
         try {
             $this->_checkParamsV2(self::$getRecruitListParamsRule);
@@ -166,6 +178,9 @@ class Recruit_Index_Action extends Global_Action_Base {
         }
     }
 
+    /**
+     * 详情
+     */
     public function getRecruitInfo() {
         try {
             $this->_checkParamsV2(self::$getRecruitInfoParamsRule);
@@ -173,6 +188,29 @@ class Recruit_Index_Action extends Global_Action_Base {
             $recruitInfo = Recruitment_Index_Service::getInstance()->getRecruitInfo($this->get['infoId']);
 
             $this->endWithResponseJson($recruitInfo);
+        } catch(Exception $exception) {
+            $this->exception = $exception;
+            Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
+
+            $this->endWithResponseJson();
+        }
+    }
+
+    /**
+     * 删除
+     */
+    public function delete() {
+        try {
+            $this->_checkParamsV2(self::$deleteParamsRule);
+
+            $loginUserId = User_Pass_Service::getLoginUserId();
+
+            $res = Recruitment_Index_Service::getInstance()->delRecruit($loginUserId, $this->post['infoId']);
+            if(!$res) {
+                throw new \Exception('del recruit failed', Global_ErrorCode_Common::RECRUIT_DELETE_FAILED);
+            }
+
+            $this->endWithResponseJson();
         } catch(Exception $exception) {
             $this->exception = $exception;
             Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");

@@ -21,7 +21,7 @@ class Information_Model extends Base_Model {
     /**
      * @param $params
      */
-    public function createInfo($params) {
+    public function createBase($params) {
         $fields = [
             'catId'       => $params['catId'],
             'userId'      => $params['userId'],
@@ -104,6 +104,22 @@ class Information_Model extends Base_Model {
         $res = $this->selectOne($this->table, $fields, $cond);
 
         return $res ?: [];
+    }
+
+    /**
+     * 删除base
+     * @param $userId
+     * @param $infoId
+     * @return bool
+     */
+    public function delBase($userId, $infoId) {
+        $cond = [
+            "userId = " => $userId,
+            "infoId = " => $infoId,
+        ];
+        $res = $this->delete($this->table, $cond);
+
+        return $res ? true : false;
     }
 
     /**

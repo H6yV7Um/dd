@@ -52,4 +52,13 @@ class Recruitment_Model extends Base_Model {
 
         return $res ?: [];
     }
+
+    public function delRecruit($infoId) {
+        $cond = [
+            "infoId = " => $infoId,
+        ];
+        $res = $this->delete($this->table, $cond);
+
+        return $res ? true : false;
+    }
 }
