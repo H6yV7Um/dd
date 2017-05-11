@@ -77,6 +77,36 @@ class Information_Model extends Base_Model {
         return $res ?: [];
     }
 
+
+    public function getBaseInfoListByIds($infoIds) {
+        $fields = [
+            'infoId',
+            'catId',
+            'userId',
+            'title',
+            'image',
+            'content',
+            'demand',
+            'extra',
+            'address',
+            'detailAddress',
+            'contact',
+            'phoneNum',
+            'createdTime',
+        ];
+        
+        $strIds = implode(',', $infoIds);
+        $cond = [
+            "infoId IN ($strIds)",
+        ];
+
+        // todo 应该按照收藏时间排序, 这里先按发布时间排序了
+        $append = "ORDER BY createdTime DESC";
+        $baseInfoList = $this->select($this->table, $fields, $cond, $append);
+
+        return $baseInfoList ?: [];
+    }
+
     /**
      * 获取兼职/旅游/教育基础信息
      * @param $infoId

@@ -38,4 +38,27 @@ class Collection_Model extends Base_Model {
 
         return $res ?: false;
     }
+
+    public function getCollListByCatIds($userId, $catIds, $page) {
+        $fields = [
+            'userId',
+            'infoId',
+            'catId',
+            'createdTime',
+        ];
+
+        $strIds = implode(',', $catIds);
+        $cond   = [
+            "userId = " => $userId,
+            "catId IN ($strIds)",
+        ];
+
+        $perPage = Information_Model::INFO_PER_PAGE_SIZE;
+        $offset = ($page - 1) * $perPage;
+        $append = "ORDER BY createdTime DESC LIMIT $offset, $perPage";
+
+        $res = $this->select($this->table, $fields, $cond, $append);
+
+        return $res ?: [];
+    }
 }

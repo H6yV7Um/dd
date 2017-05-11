@@ -32,6 +32,24 @@ class User_Center_Action extends Global_Action_Base {
             'method'  => 'post',
         ],
     ];
+
+    protected static $getCollListParamsRule = [
+        [
+            'key'     => 'type',
+            'default' => 'recruit',
+            'func'    => 'strval',
+            'regex'   => '/^(recruit|travel|edu)$/',
+            'method'  => 'get',
+        ],
+        [
+            'key'     => 'page',
+            'default' => '1',
+            'func'    => 'intval',
+            'regex'   => '/^\d+$/',
+            'method'  => 'get',
+        ],
+    ];
+
     public function getPubList() {
         try {
             $this->_checkParamsV2(self::$getPubListParamsRule);
@@ -80,6 +98,23 @@ class User_Center_Action extends Global_Action_Base {
             Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
             
             $this->endWithResponseJson();   
+        }
+    }
+
+    public function getCollList() {
+        try {
+            $this->_checkParamsV2(self::$getCollListParamsRule);
+
+            $loginUserId = User_Pass_Service::getLoginUserId();
+
+            $collList = User_Center_Service::getInstance()->getCollList($loginUserId, $this->get['type'], $this->get['page']);
+
+            $this->endWithResponseJson($collList);
+        } catch(Exception $exception) {
+            $this->exception = $exception;
+            Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
+
+            $this->endWithResponseJson();
         }
     }
 }
