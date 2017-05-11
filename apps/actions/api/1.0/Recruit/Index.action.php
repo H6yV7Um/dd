@@ -187,6 +187,9 @@ class Recruit_Index_Action extends Global_Action_Base {
 
             $recruitInfo = Recruitment_Index_Service::getInstance()->getRecruitInfo($this->get['infoId']);
 
+            // 更新访问数量
+            Information_Model::getInstance()->incrViewCnt($this->get['infoId']);
+
             $this->endWithResponseJson($recruitInfo);
         } catch(Exception $exception) {
             $this->exception = $exception;

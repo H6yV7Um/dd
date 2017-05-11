@@ -170,6 +170,9 @@ class Edu_Index_Action extends Global_Action_Base {
 
             $eduInfo = Education_Index_Service::getInstance()->getEduInfo($this->get['infoId']);
 
+            // 更新访问数量
+            Information_Model::getInstance()->incrViewCnt($this->get['infoId']);
+
             $this->endWithResponseJson($eduInfo);
         } catch(Exception $exception) {
             $this->exception = $exception;

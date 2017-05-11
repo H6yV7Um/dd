@@ -175,6 +175,9 @@ class Travel_Index_Action extends Global_Action_Base {
 
             $travelInfo = Travel_Index_Service::getInstance()->getTravelInfo($this->get['infoId']);
 
+            // 更新访问数量
+            Information_Model::getInstance()->incrViewCnt($this->get['infoId']);
+
             $this->endWithResponseJson($travelInfo);
         } catch(Exception $exception) {
             $this->exception = $exception;

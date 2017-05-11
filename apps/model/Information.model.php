@@ -96,6 +96,8 @@ class Information_Model extends Base_Model {
             'detailAddress',
             'contact',
             'phoneNum',
+            'viewCnt',
+            'commCnt',
             'createdTime',
         ];
         $cond = [
@@ -139,5 +141,19 @@ class Information_Model extends Base_Model {
         $c = $res[0]['cname'];
         $a = $res[0]['aname'];
         return "$p-$c-$a";
+    }
+
+    public function incrViewCnt($infoId) {
+        $sql = "update {$this->table} set viewCnt = viewCnt + 1 where infoId = $infoId";
+        $res = $this->queryBySql($sql);
+
+        return $res ? true : false;
+    }
+
+    public function incrCommCnt($infoId) {
+        $sql = "update {$this->table} set commCnt = commCnt + 1 where infoId = $infoId";
+        $res = $this->queryBySql($sql);
+
+        return $res ? true : false;
     }
 }
