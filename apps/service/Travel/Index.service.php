@@ -78,6 +78,8 @@ class Travel_Index_Service extends Global_Service_Base {
         foreach($travelList as &$value) {
             $userInfo = User_Model::getInstance()->getUserInfo($value['userId']);
             $value['username'] = $userInfo ? $userInfo['username'] : "";
+            $catInfo  = Category_Model::getInstance()->getCatInfo($value['catId']);
+            $value['catName'] = $catInfo['catName'];
             $value['address'] = Information_Model::getInstance()->getAddressByCode($value['address']);
         }
 
@@ -111,6 +113,9 @@ class Travel_Index_Service extends Global_Service_Base {
         ];
         $travelInfo['goVehicle'] = $vehicle[$travelInfo['goVehicle']];
         $travelInfo['backVehicle'] = $vehicle[$travelInfo['backVehicle']];
+
+        $catInfo  = Category_Model::getInstance()->getCatInfo($baseInfo['catId']);
+        $travelInfo['catName'] = $catInfo['catName'];
 
         return array_merge($baseInfo, $travelInfo);
     }

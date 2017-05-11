@@ -123,15 +123,6 @@ class Edu_Index_Action extends Global_Action_Base {
             $this->_checkParamsV2(self::$publishParamsRule);
 
             $loginUserId = User_Pass_Service::getLoginUserId();
-//            $eduInfo = [
-//                'infoId' => $baseInfo->infoId,
-//                'price' => $data['price'],
-//                'startDate' => $data['startDate'],
-//                'endDate' => $data['endDate'],
-//                'startTime' => $data['startTime'],
-//                'endTime' => $data['startTime'],
-//                'createdTime' => time(),
-//            ];
             // 上传图片
             $image = File_Upload_Service::getInstance()->uploadImg($_FILES['image']);
             $this->post['image'] = $image;

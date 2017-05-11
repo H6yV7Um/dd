@@ -36,4 +36,20 @@ class Category_Model extends Base_Model {
 
         return $res ?: [];
     }
+
+    public function getCatInfo($catId) {
+        $fields = [
+            'catId',
+            'catName',
+            'parentId',
+            'sort',
+            'description',
+        ];
+        $cond = [
+            "catId = " => $catId,
+        ];
+        $res = $this->selectOne($this->table, $fields, $cond);
+
+        return $res ?: [];
+    }
 }

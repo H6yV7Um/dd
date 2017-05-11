@@ -49,7 +49,7 @@ class Education_Index_Service extends Global_Service_Base {
             'endTime' => $params['endTime'],
             'createdTime' => $currTime,
         ];
-        
+
         $res = Education_Model::getInstance()->createEdu($eduData);
         if(!$res) {
             Information_Model::getInstance()->rollBack();
@@ -76,6 +76,8 @@ class Education_Index_Service extends Global_Service_Base {
         foreach($eduList as &$value) {
             $userInfo = User_Model::getInstance()->getUserInfo($value['userId']);
             $value['username'] = $userInfo ? $userInfo['username'] : "";
+            $catInfo  = Category_Model::getInstance()->getCatInfo($value['catId']);
+            $value['catName'] = $catInfo['catName'];
             $value['address'] = Information_Model::getInstance()->getAddressByCode($value['address']);
         }
 
@@ -93,6 +95,9 @@ class Education_Index_Service extends Global_Service_Base {
         if(!$baseInfo || !$eduInfo) {
             return [];
         }
+
+        $catInfo  = Category_Model::getInstance()->getCatInfo($baseInfo['catId']);
+        $eduInfo['catName'] = $catInfo['catName'];
 
         return array_merge($baseInfo, $eduInfo);
     }

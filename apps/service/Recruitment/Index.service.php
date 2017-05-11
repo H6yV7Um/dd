@@ -77,6 +77,8 @@ class Recruitment_Index_Service extends Global_Service_Base {
         foreach($recruitList as &$value) {
             $userInfo = User_Model::getInstance()->getUserInfo($value['userId']);
             $value['username'] = $userInfo ? $userInfo['username'] : "";
+            $catInfo  = Category_Model::getInstance()->getCatInfo($value['catId']);
+            $value['catName'] = $catInfo['catName'];
             $value['address'] = Information_Model::getInstance()->getAddressByCode($value['address']);
         }
 
@@ -109,6 +111,9 @@ class Recruitment_Index_Service extends Global_Service_Base {
             '5' => '年',
         ];
         $recruitInfo['salaryType'] = $salaryType[$recruitInfo['salaryType']];
+
+        $catInfo  = Category_Model::getInstance()->getCatInfo($baseInfo['catId']);
+        $recruitInfo['catName'] = $catInfo['catName'];
 
         return array_merge($baseInfo, $recruitInfo);
     }
