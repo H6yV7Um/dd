@@ -42,5 +42,8 @@ class Global_ErrorCode_Common {
     const MESSAGE_SEND_MSG_FAILED  = '002002';
     const MESSAGE_SEND_PHONE_CODE_FAILED = '002003';
 
+    // 获取分类列表失败
+    const CATEGORY_GET_CAT_LIST_FAILED = '003001';
+
 
 }

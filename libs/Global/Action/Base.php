@@ -118,7 +118,7 @@ class Global_Action_Base {
             $res = array(
                 "errNo"  => 0,
                 "errMsg" => "",
-                "result" => $result,
+                "data"   => $result,
             );
         } else {
             $this->errno  = $this->exception->getCode();
@@ -126,7 +126,7 @@ class Global_Action_Base {
             $res          = array(
                 "errNo"  => $this->exception->getCode() ?: 500,
                 "errMsg" => $this->exception->getMessage() ?: "Internal error",
-                "result" => $result,
+                "data"   => $result,
             );
         }
         $this->renderJSON($res);
