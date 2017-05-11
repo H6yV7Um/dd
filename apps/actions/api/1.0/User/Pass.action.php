@@ -16,10 +16,17 @@ class User_Pass_Action extends Global_Action_Base {
             'method'  => 'post',
         ],
         [
+            'key'     => 'username',
+            'default' => '',
+            'func'    => 'strval',
+            'regex'   => '/^\w{4,16}$/',
+            'method'  => 'post',
+        ],
+        [
             'key'     => 'password',
             'default' => '',
             'func'    => 'strval',
-            'regex'   => '/^\w{6,14}$/',
+            'regex'   => '/^\w{6,16}$/',
             'method'  => 'post',
         ],
         [
@@ -207,7 +214,7 @@ class User_Pass_Action extends Global_Action_Base {
 
             // 登出之前的会话
             User_Pass_Service::getInstance()->logout();
-            
+
             $this->endWithResponseJson();
         } catch(Exception $exception) {
             $this->exception = $exception;

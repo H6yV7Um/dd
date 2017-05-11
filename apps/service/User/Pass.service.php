@@ -45,6 +45,7 @@ class User_Pass_Service extends Global_Service_Base {
     public function register($params) {
         $needFields = [
             'phoneNum',
+            'username',
             'password',
         ];
         foreach($needFields as $field) {
@@ -57,6 +58,11 @@ class User_Pass_Service extends Global_Service_Base {
         // 手机号是否已注册
         if(User_Model::getInstance()->isPhoneExists($params['phoneNum'])) {
             throw new \Exception('phone already use', Global_ErrorCode_User::USER_ALREADY_REGISTER);
+        }
+
+        // 用户是否已注册
+        if(User_Model::getInstance()->isUsernameExists($params['username'])) {
+            throw new \Exception('username already use', Global_ErrorCode_User::USER_ALREADY_REGISTER);
         }
 
         // 随机密码字符串

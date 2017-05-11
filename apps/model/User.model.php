@@ -21,6 +21,7 @@ class User_Model extends Base_Model {
         Bingo_Log::notice("create user start. params: " . json_encode($params));
         $fields = [
             'phoneNum' => $params['phoneNum'],
+            'username' => $params['username'],
             'password' => $params['password'],
             'pwdStr'   => $params['pwdStr'],
             'createdTime' => time(),
@@ -40,6 +41,15 @@ class User_Model extends Base_Model {
     public function isPhoneExists($phoneNum) {
         $cond = [
             "phoneNum = " => $phoneNum,
+        ];
+        $res  = $this->selectCount($this->table, $cond);
+
+        return $res ? true : false;
+    }
+
+    public function isUsernameExists($username) {
+        $cond = [
+            "username = " => $username,
         ];
         $res  = $this->selectCount($this->table, $cond);
 
