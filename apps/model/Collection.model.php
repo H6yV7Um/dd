@@ -29,12 +29,17 @@ class Collection_Model extends Base_Model {
     }
 
     public function getCollInfo($userId, $infoId, $catId) {
-        $cond = [
+        $fields = [
             'userId' => $userId,
             'infoId' => $infoId,
             'catId'  => $catId,
         ];
-        $res = $this->selectOne($this->table, $cond);
+        $cond = [
+            'userId = ' => $userId,
+            'infoId = ' => $infoId,
+            'catId  = '  => $catId,
+        ];
+        $res = $this->selectOne($this->table, $fields, $cond);
 
         return $res ?: false;
     }
@@ -60,5 +65,16 @@ class Collection_Model extends Base_Model {
         $res = $this->select($this->table, $fields, $cond, $append);
 
         return $res ?: [];
+    }
+
+    public function delColl($userId, $infoId, $catId) {
+        $cond = [
+            'userId = ' => $userId,
+            'infoId = ' => $infoId,
+            'catId  = '  => $catId,
+        ];
+        $res = $this->delete($this->table, $cond);
+
+        return $res ? true : false;
     }
 }

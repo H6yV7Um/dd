@@ -37,6 +37,8 @@ class Global_ErrorCode_Common {
     const USER_RESET_PWD_FAILED = '001010';
     const USER_COLL_FAILED = '001011';
     const USER_ALREADY_COLL = '001012';
+    const USER_NOT_COLL = '001012';
+    const USER_DEL_COLL_FAILED = '001011';
 
     // message相关
     // 请求过于频繁, 请稍后再试

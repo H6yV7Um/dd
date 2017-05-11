@@ -31,6 +31,13 @@ class User_Center_Action extends Global_Action_Base {
             'regex'   => '/^\d+$/',
             'method'  => 'post',
         ],
+        [
+            'key'     => 'type',
+            'default' => '1',
+            'func'    => 'intval',
+            'regex'   => '/^(0|1)$/',
+            'method'  => 'post',
+        ],
     ];
 
     protected static $getCollListParamsRule = [
@@ -75,23 +82,36 @@ class User_Center_Action extends Global_Action_Base {
             
             $infoId = $this->post['infoId'];
             $catId  = $this->post['catId'];
+            $type   = $this->post['type'];
             $baseInfo = Information_Model::getInstance()->getBaseInfo($infoId);
             if(!$baseInfo || $baseInfo['catId'] != $catId) {
                 throw new \Exception('info is not exist', Global_ErrorCode_Common::INFORMATION_INFO_NOT_EXISTS);
             }
 
-            // 是否已经收藏
             $collInfo = Collection_Model::getInstance()->getCollInfo($loginUserId, $infoId, $catId);
-            if($collInfo) {
-                throw new \Exception('already collected', Global_ErrorCode_Common::USER_ALREADY_COLL);
-            }
-            
 
-            $res = Collection_Model::getInstance()->createColl($loginUserId, $infoId, $catId);
-            if(!$res) {
-                throw new \Exception('coll failed', Global_ErrorCode_Common::USER_COLL_FAILED);
+            if($type) {
+                // 收藏
+                if($collInfo) {
+                    throw new \Exception('already collected', Global_ErrorCode_Common::USER_ALREADY_COLL);
+                }
+
+                $res = Collection_Model::getInstance()->createColl($loginUserId, $infoId, $catId);
+                if(!$res) {
+                    throw new \Exception('coll failed', Global_ErrorCode_Common::USER_COLL_FAILED);
+                }
+            } else {
+                // 取消收藏
+                if(!$collInfo) {
+                    throw new \Exception('have not collected', Global_ErrorCode_Common::USER_NOT_COLL);
+                }
+
+                $res = Collection_Model::getInstance()->delColl($loginUserId, $infoId, $catId);
+                if(!$res) {
+                    throw new \Exception('del coll failed', Global_ErrorCode_Common::USER_DEL_COLL_FAILED);
+                }
             }
-            
+
             $this->endWithResponseJson();
         } catch(Exception $exception) {
             $this->exception = $exception;
