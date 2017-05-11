@@ -113,6 +113,15 @@ class Recruit_Index_Action extends Global_Action_Base {
         ],
     ];
 
+    protected static $getRecruitInfoParamsRule = [
+        [
+            'key'     => 'infoId',
+            'func'    => 'strval',
+            'regex'   => '/^\d+$/',
+            'method'  => 'get',
+        ],
+    ];
+
     /**
      * 处理发布行为
      */
@@ -149,6 +158,21 @@ class Recruit_Index_Action extends Global_Action_Base {
             $recruitList = Recruitment_Index_Service::getInstance()->getRecruitList($catId, $page);
 
             $this->endWithResponseJson($recruitList);
+        } catch(Exception $exception) {
+            $this->exception = $exception;
+            Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
+
+            $this->endWithResponseJson();
+        }
+    }
+
+    public function getRecruitInfo() {
+        try {
+            $this->_checkParamsV2(self::$getRecruitInfoParamsRule);
+
+            $recruitInfo = Recruitment_Index_Service::getInstance()->getRecruitInfo($this->get['infoId']);
+
+            $this->endWithResponseJson($recruitInfo);
         } catch(Exception $exception) {
             $this->exception = $exception;
             Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");

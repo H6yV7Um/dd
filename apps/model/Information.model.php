@@ -50,8 +50,9 @@ class Information_Model extends Base_Model {
      * @param $catId
      * @param $page
      */
-    public function getRecruitList($catId, $page) {
+    public function getBaseInfoList($catId, $page) {
         $fields = [
+            'infoId',
             'catId',
             'userId',
             'title',
@@ -72,6 +73,35 @@ class Information_Model extends Base_Model {
         $offset = ($page - 1) * $perPage;
         $append = "ORDER BY createdTime DESC LIMIT $offset, $perPage";
         $res = $this->select($this->table, $fields, $cond, $append);
+
+        return $res ?: [];
+    }
+
+    /**
+     * 获取兼职/旅游/教育基础信息
+     * @param $infoId
+     * @return array
+     */
+    public function getBaseInfo($infoId) {
+        $fields = [
+            'infoId',
+            'catId',
+            'userId',
+            'title',
+            'image',
+            'content',
+            'demand',
+            'extra',
+            'address',
+            'detailAddress',
+            'contact',
+            'phoneNum',
+            'createdTime',
+        ];
+        $cond = [
+            "infoId = " => $infoId,
+        ];
+        $res = $this->selectOne($this->table, $fields, $cond);
 
         return $res ?: [];
     }

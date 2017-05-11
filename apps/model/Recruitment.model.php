@@ -32,4 +32,24 @@ class Recruitment_Model extends Base_Model {
 
         return $res ? true : false;
     }
+
+    public function getRecruitInfo($infoId) {
+        $fields = [
+            'infoId',
+            'salary',
+            'salaryType',
+            'number',
+            'startDate',
+            'endDate',
+            'startTime',
+            'endTime',
+            'createdTime',
+        ];
+        $cond = [
+            "infoId = " => $infoId,
+        ];
+        $res = $this->selectOne($this->table, $fields, $cond);
+
+        return $res ?: [];
+    }
 }
