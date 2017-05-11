@@ -45,5 +45,16 @@ class Global_ErrorCode_Common {
     // 获取分类列表失败
     const CATEGORY_GET_CAT_LIST_FAILED = '003001';
 
+    // 兼职招聘
+    // 创建base info失败
+    const RECRUIT_CREATE_BASE_DATA_FAILED = '004001';
+    const RECRUIT_CREATE_RECRUIT_DATA_FAILED = '004002';
+    const RECRUIT_CREATE_FAILED = '004003';
+
+    const FILE_UPLOAD_FILE_NAME_ERROR = '007001';
+    const FILE_UPLOAD_RECEIVE_FILED_ERROR = '007002';
+    const FILE_UPLOAD_FILE_IS_NOT_IMG = '007003';
+    const FILE_UPLOAD_MOVE_FILE_FAILED = '007004';
+
 
 }

@@ -27,6 +27,9 @@ if (defined("ONLINE") && ONLINE === true) {
     define('CONFIG_PATH', CONFIG_ROOT . 'debug/');
 }
 
+// 上次文件的路径
+define("FILE_PATH", ROOT_PATH . 'files/');
+
 // 冲缓存
 if (isset($_GET['NOCACHE']) && $_GET['NOCACHE'] == 1) {
     define('NOCACHE', true);

@@ -4,6 +4,9 @@
  * Class Category_Index_Service
  */
 class Category_Index_Service extends Global_Service_Base {
+    const CAT_RECRUIT = 1;
+    const CAT_TRAVEL  = 2;
+    const CAT_EDU     = 3;
     /**
      * @return Category_Index_Service
      */

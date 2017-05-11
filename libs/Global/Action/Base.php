@@ -38,10 +38,6 @@ class Global_Action_Base {
         $this->renderJSON($result);
     }
 
-    public function getLoginUserId($bduss = null) {
-
-    }
-
     /**
      * 参数校验
      * @param $paramRuleList

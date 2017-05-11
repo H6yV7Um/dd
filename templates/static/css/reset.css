@@ -1,0 +1,139 @@
+@charset "utf-8";
+/* =================================================*/
+/* ========= 移动端重置，请勿修改,2015.11.5 ==================*/
+/* =================================================*/
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, /* structural elements 结构元素 */
+dl, dt, dd, ul, ol, li, /* list elements 列表元素 */
+pre,figure,figcaption /* text formatting elements 文本格式元素 */
+fieldset, button, input, textarea, /* form elements 表单元素 */
+th, td { /* table elements 表格元素 */
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+/*防止iphone横屏字号放大*/
+*{
+    -ms-text-size-adjust: 100%; /* 1 */
+    -webkit-text-size-adjust: 100%; /* 1 */
+    text-size-adjust: 100%;
+}
+html{
+    font-size: 625%;
+}
+/*设置全局样式*/
+body {
+    font:0.16rem/1.5 微软雅黑,Arial;
+    color: #333;
+    /*允许独立的滚动区域触摸回弹,解决滑动时卡顿*/
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+}
+ul, ol {
+    list-style-type: none;
+}
+a{text-decoration: none;}
+a:focus {outline: 1px dotted;}
+a:active,
+a:hover {
+    outline: 0 none;
+    text-decoration: underline;
+}
+a:link {
+    text-decoration:none;
+}
+/* 将斜体扶正 */
+i, em{ font-style: normal; }
+/*设置图片*/
+img {
+    width: 100%;
+    display: block;
+}
+/* 隐藏手机上webkit内核点击出现蓝色框框*/
+*{-webkit-tap-highlight-color: transparent;}
+
+/* 清除iPhone默认的样式*/
+input[type='text'],
+input[type='button'],
+input[type='number'],
+input[type='tel'],
+input[type='email'],
+textarea {
+    -webkit-appearance: none;
+}
+/* 1. 避免 Android 4.0.* 中的 WebKit bug ，该bug会破坏原生的「audio」 和「video」的控制器
+ * 2. 更正 iOS 中无法设置可点击的「input」的问题*/
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+}
+/*解决长时间按住页面出现闪退*/
+.callout{
+    -webkit-touch-callout: none;
+}
+/*解决某些Android手机圆角失效*/
+.radius{
+    background-clip: padding-box;
+}
+/*文字溢出显示省略号*/
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/*文字2行溢出显示省略号*/
+.ellipsis2{
+    display: -webkit-box;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;			/*显示2行*/
+}
+/*清除浮动*/
+.clear::after{
+    content: "";
+    height: 0;
+    visibility: hidden;
+    font-size: 0;
+    clear: both;
+    display: block;
+}
+/*基础样式*/
+.dn{display:none;}          /*隐藏*/
+
+.tal{text-align:left;}      /*文本靠左*/
+.tar{text-align:right;}     /*文本靠右*/
+.tac{text-align:center;}    /*文本居中*/
+.fl{float:left;}            /*左浮动*/
+.fr{float:right;}           /*右浮动*/
+.pr{position:relative;}     /*相对定位*/
+.b{font-weight:700;}        /*加粗*/
+.wn{white-space:nowrap;}     /*文本不换行*/
+.fn{font-weight:normal;}    /*文字去粗*/
+
+.f12{font-size:0.12rem;}    /*字体：12px*/
+.f14{font-size:0.14rem;}
+.f15{font-size:0.15rem;}
+.f16{font-size:0.16rem;}
+.f18{font-size:0.18rem;}
+.f20{font-size:0.2rem;}
+.f22{font-size:0.22rem;}
+.f24{font-size:0.24rem;font-family:Arial, "Microsoft Yahei", Simsun;}
+
+/*重新自定义*/
+.bg_white{background: #fff}     /*白色背景*/
+.bg_gray{background: #eee;}  /*灰色背景*/
+.cl_white{color: #fff;}         /*白色字体*/
+.cl_red{color: #f65342}
+.cl_333{color: #333;}           /*333*/
+.cl_666{color: #666;}           /*666*/
+.cl_999{color: #999;}           /*999*/
+.bd{border: 1px solid #d7d7d7;}             /*全边框*/
+.bd_t{border-top: 1px solid #d7d7d7;}       /*上边框*/
+.bd_b{border-bottom: 1px solid #d7d7d7;}    /*下边框*/
+.bd_t_b{border-top: 1px solid #ddd;border-bottom: 1px solid #d7d7d7;}    /*上下边框*/
+.main_wid{width: 90%;margin: auto;}
+.main_wid2{width: 100%;padding: 0 3%;}
+.br{border-radius: .04rem;}                 /*圆角*/
+.br50{border-radius: 50%;}
