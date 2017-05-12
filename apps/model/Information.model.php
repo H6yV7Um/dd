@@ -77,6 +77,33 @@ class Information_Model extends Base_Model {
         return $res ?: [];
     }
 
+    public function getBaseInfoListByCatIds($catIds) {
+        $fields = [
+            'infoId',
+            'catId',
+            'userId',
+            'title',
+            'image',
+            'content',
+            'demand',
+            'extra',
+            'address',
+            'detailAddress',
+            'contact',
+            'phoneNum',
+            'createdTime',
+        ];
+
+        $strIds = implode(',', $catIds);
+        $cond = [
+            "catId IN ($strIds)",
+        ];
+        $append = "ORDER BY createdTime DESC";
+        $baseInfoList = $this->select($this->table, $fields, $cond, $append);
+
+        return $baseInfoList ?: [];
+    }
+
 
     public function getBaseInfoListByIds($infoIds) {
         $fields = [

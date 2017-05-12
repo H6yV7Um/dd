@@ -146,6 +146,22 @@ class Travel_Index_Action extends Global_Action_Base {
         }
     }
 
+    public function getRecList() {
+        try {
+            $catList = Category_Model::getInstance()->getCatList(2);
+            $catIds  = array_column($catList, 'catId');
+            $baseInfoList = Information_Model::getInstance()->getBaseInfoListByCatIds($catIds);
+            $baseInfoList = array_slice($baseInfoList, 0, 5);
+
+            $this->endWithResponseJson($baseInfoList);
+        } catch(Exception $exception) {
+            $this->exception = $exception;
+            Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
+
+            $this->endWithResponseJson();
+        }
+    }
+
     /**
      * 列表
      */
