@@ -57,6 +57,20 @@ class User_Center_Action extends Global_Action_Base {
         ],
     ];
 
+    public function profile() {
+        try {
+            $loginUserId = User_Pass_Service::getLoginUserId();
+            $userInfo = User_Model::getInstance()->getUserInfo($loginUserId);
+
+            $this->endWithResponseJson($userInfo);
+        } catch(Exception $exception) {
+            $this->exception = $exception;
+            Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
+
+            $this->endWithResponseJson();
+        }
+    }
+
     public function getPubList() {
         try {
             $this->_checkParamsV2(self::$getPubListParamsRule);
