@@ -133,7 +133,13 @@ class Global_Action_Base {
      */
     public function renderJSON($val) {
         header("Content-type:application/json; charset=utf-8");
-        echo json_encode($val);
+        $jsonp    = $_REQUEST['jsonp'] ?: "";
+        $jsonData = json_encode($val);
+        if($jsonp) {
+            echo $jsonp . "($jsonData)";
+        } else {
+            echo $jsonData;
+        }
         exit;
     }
 }
