@@ -4,9 +4,9 @@
  * Class Category_Index_Service
  */
 class Category_Index_Service extends Global_Service_Base {
-    const CAT_RECRUIT = 1;
-    const CAT_TRAVEL  = 2;
-    const CAT_EDU     = 3;
+    const CAT_RECRUIT = 'recruit';
+    const CAT_TRAVEL  = 'travel';
+    const CAT_EDU     = 'edu';
     /**
      * @return Category_Index_Service
      */
@@ -21,13 +21,19 @@ class Category_Index_Service extends Global_Service_Base {
     }
 
     /**
-     * @param $parentId
+     * @param $type
      * @return array|bool
      */
-    public function getCatList($parentId) {
-        if(!$parentId) {
+    public function getCatList($type) {
+        if(!$type) {
             return false;
         }
+        $catMap = [
+            'recruit' => 1,
+            'travel'  => 2,
+            'edu'     => 3,
+        ];
+        $parentId = $catMap[$type];
 
         return Category_Model::getInstance()->getCatList($parentId);
     }

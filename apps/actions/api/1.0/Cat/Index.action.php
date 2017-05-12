@@ -4,9 +4,9 @@ class Cat_Index_Action extends Global_Action_Base {
     protected static $getCateListParamsRule = [
         [
             'key'     => 'type',
-            'default' => '1',
-            'func'    => 'intval',
-            'regex'   => '/^[123]$/',
+            'default' => 'recruit',
+            'func'    => 'strval',
+            'regex'   => '/^(recruit|travel|edu)$/',
             'method'  => 'get',
         ],
     ];
