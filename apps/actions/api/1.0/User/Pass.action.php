@@ -72,6 +72,21 @@ class User_Pass_Action extends Global_Action_Base {
         ],
     ];
 
+    protected static $isRegisterParamsRule = [
+        [
+            'key'     => 'type',
+            'func'    => 'strval',
+            'regex'   => '/^(username|phoneNum)$/',
+            'method'  => 'get',
+        ],
+        [
+            'key'     => 'value',
+            'func'    => 'strval',
+            'regex'   => '/^.*$/',
+            'method'  => 'get',
+        ],
+    ];
+
     protected static $resetPwdParamsRule = [
         [
             'key'     => 'phoneNum',
@@ -182,6 +197,28 @@ class User_Pass_Action extends Global_Action_Base {
             }
 
             $this->endWithResponseJson();
+        } catch(Exception $exception) {
+            $this->exception = $exception;
+            Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
+
+            $this->endWithResponseJson();
+        }
+    }
+
+    /**
+     * 手机号/用户名是否已注册
+     */
+    public function isRegister() {
+        try {
+            $this->_checkParamsV2(self::$isRegisterParamsRule);
+
+            $type = $this->get['type'];
+            $value = $this->get['value'];
+            $res = [
+                'isRegister' => User_Model::getInstance()->isRegister($type, $value) ? 1 : 0,
+            ];
+
+            $this->endWithResponseJson($res);
         } catch(Exception $exception) {
             $this->exception = $exception;
             Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");

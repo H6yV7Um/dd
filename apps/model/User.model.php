@@ -135,4 +135,13 @@ class User_Model extends Base_Model {
 
         return $res ?: [];
     }
+
+    public function isRegister($type, $value) {
+        $cond = [
+            "$type = " => $value,
+        ];
+        $res = $this->selectCount($this->table, $cond);
+
+        return $res ? true : false;
+    }
 }
