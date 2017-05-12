@@ -9,7 +9,7 @@ class Information_Model extends Base_Model {
      */
     protected $table = 'information';
 
-    const INFO_PER_PAGE_SIZE = '15';
+    const INFO_PER_PAGE_SIZE = '5';
 
     /**
      * @return Information_Model
@@ -216,5 +216,34 @@ class Information_Model extends Base_Model {
         $pubList = $this->select($this->table, $fields, $cond, $append);
 
         return $pubList ?: [];
+    }
+
+    public function getRecList($page = 1) {
+        $fields = [
+            'infoId',
+            'catId',
+            'userId',
+            'title',
+            'image',
+            'content',
+            'demand',
+            'extra',
+            'address',
+            'detailAddress',
+            'contact',
+            'phoneNum',
+            'createdTime',
+        ];
+        $cond = [
+            "isRec = " => 1,
+        ];
+
+        $perPage = self::INFO_PER_PAGE_SIZE;
+        $offset = ($page - 1) * $perPage;
+        $append = "ORDER BY updatedTime DESC LIMIT $offset, $perPage";
+
+        $res = $this->select($this->table, $fields, $cond, $append);
+
+        return $res ?: [];
     }
 }
