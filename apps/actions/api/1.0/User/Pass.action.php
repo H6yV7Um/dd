@@ -40,7 +40,7 @@ class User_Pass_Action extends Global_Action_Base {
 
     protected static $loginParamsRule = [
         [
-            'key'     => 'phoneNum',
+            'key'     => 'username',
             'default' => '',
             'func'    => 'strval',
             'regex'   => '/^.*$/',
@@ -146,7 +146,7 @@ class User_Pass_Action extends Global_Action_Base {
         try {
             $this->_checkParamsV2(self::$loginParamsRule);
 
-            $res = User_Pass_Service::getInstance()->login($this->post['phoneNum'], $this->post['password']);
+            $res = User_Pass_Service::getInstance()->login($this->post['username'], $this->post['password']);
             if(!$res) {
                 throw new \Exception('login failed', Global_ErrorCode_User::USER_LOGIN_FAILED);
             }

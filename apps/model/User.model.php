@@ -58,11 +58,11 @@ class User_Model extends Base_Model {
 
     /**
      * 验证用户登录
-     * @param $phoneNum
+     * @param $username
      * @param $password
      * @return bool|array
      */
-    public function authUser($phoneNum, $password) {
+    public function authUser($username, $password) {
         $fields = [
             "userId",
             "password",
@@ -76,7 +76,7 @@ class User_Model extends Base_Model {
             "address",
             "detailAddress",
         ];
-        $cond = "phoneNum = '$phoneNum' OR username = '$phoneNum'";
+        $cond = "phoneNum = '$username' OR username = '$username'";
         $res = $this->selectOne($this->table, $fields, $cond);
         if(!$res) {
             return false;

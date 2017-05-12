@@ -79,13 +79,13 @@ class User_Pass_Service extends Global_Service_Base {
 
     /**
      * 登录
-     * @param $phoneNum
+     * @param $username
      * @param $password
      * @return bool
      * @throws Exception
      */
-    public function login($phoneNum, $password) {
-        $userInfo = User_Model::getInstance()->authUser($phoneNum, $password);
+    public function login($username, $password) {
+        $userInfo = User_Model::getInstance()->authUser($username, $password);
         if(!$userInfo) {
             throw new \Exception('phone or password error', Global_ErrorCode_User::USER_LOGIN_FAILED);
         }
