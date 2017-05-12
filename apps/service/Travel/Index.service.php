@@ -123,6 +123,11 @@ class Travel_Index_Service extends Global_Service_Base {
     public function delTravel($userId, $infoId) {
         Information_Model::getInstance()->startTransaction();
 
+        $res = Information_Model::getInstance()->getBaseInfo($infoId);
+        if(!$res) {
+            throw new \Exception('info is not exists', Global_ErrorCode_Common::INFORMATION_INFO_NOT_EXISTS);
+        }
+
         $res = Information_Model::getInstance()->delBase($userId, $infoId);
         if(!$res) {
             Information_Model::getInstance()->rollBack();
