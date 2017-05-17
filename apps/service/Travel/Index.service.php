@@ -93,6 +93,8 @@ class Travel_Index_Service extends Global_Service_Base {
      */
     public function getTravelInfo($infoId) {
         $baseInfo = Information_Model::getInstance()->getBaseInfo($infoId);
+        $baseInfo['address'] = Information_Model::getInstance()->getAddressByCode($baseInfo['address']);
+
         $travelInfo = Travel_Model::getInstance()->getTravelInfo($infoId);
         if(!$baseInfo || !$travelInfo) {
             return [];

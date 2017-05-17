@@ -91,6 +91,8 @@ class Education_Index_Service extends Global_Service_Base {
      */
     public function getEduInfo($infoId) {
         $baseInfo = Information_Model::getInstance()->getBaseInfo($infoId);
+        $baseInfo['address'] = Information_Model::getInstance()->getAddressByCode($baseInfo['address']);
+        
         $eduInfo = Education_Model::getInstance()->getEduInfo($infoId);
         if(!$baseInfo || !$eduInfo) {
             return [];

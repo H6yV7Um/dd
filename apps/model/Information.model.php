@@ -280,6 +280,11 @@ class Information_Model extends Base_Model {
      * @return string
      */
     public function getAddressByCode($code) {
+        if(!is_numeric($code)) {
+            // 如果address不是地区码, 那么直接返回
+            return $code;
+        }
+
         $sql = "select p.pname, c.cname, a.aname from province as p left join city as c on p.pcode = c.provinceCode left join areaCounty as a on c.ccode = a.cityCode where acode = $code";
         $res = $this->queryBySql($sql);
 
