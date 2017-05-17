@@ -60,7 +60,7 @@ class Travel_Index_Service extends Global_Service_Base {
 
         Information_Model::getInstance()->commit();
 
-        return true;
+        return $lastInsertId;
     }
 
     /**

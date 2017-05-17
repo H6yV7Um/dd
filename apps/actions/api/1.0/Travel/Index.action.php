@@ -132,12 +132,14 @@ class Travel_Index_Action extends Global_Action_Base {
             $image = File_Upload_Service::getInstance()->uploadImg($_FILES['image']);
             $this->post['image'] = $image;
 
-            $res = Travel_Index_Service::getInstance()->createTravel($loginUserId, $this->post);
-            if(!$res) {
+            $infoId = Travel_Index_Service::getInstance()->createTravel($loginUserId, $this->post);
+            if(!$infoId) {
                 throw new \Exception('create travel failed', Global_ErrorCode_Common::RECRUIT_CREATE_FAILED);
             }
 
-            $this->endWithResponseJson();
+            $this->endWithResponseJson([
+                'infoId' => $infoId,
+            ]);
         } catch(Exception $exception) {
             $this->exception = $exception;
             Bingo_Log::warning("internal exception: code: {$this->exception->getCode()} msg: {$this->exception->getMessage()}");
