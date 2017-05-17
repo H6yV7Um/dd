@@ -64,5 +64,7 @@ class Global_ErrorCode_Common {
     const FILE_UPLOAD_FILE_IS_NOT_IMG = '007003';
     const FILE_UPLOAD_MOVE_FILE_FAILED = '007004';
 
+    const COMMENT_COMM_FAILED = '008001';
+
 
 }
