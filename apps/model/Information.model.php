@@ -64,6 +64,8 @@ class Information_Model extends Base_Model {
             'detailAddress',
             'contact',
             'phoneNum',
+            'viewCnt',
+            'commCnt',
             'createdTime',
         ];
         $cond = [
@@ -73,6 +75,50 @@ class Information_Model extends Base_Model {
         $offset = ($page - 1) * $perPage;
         $append = "ORDER BY createdTime DESC LIMIT $offset, $perPage";
         $res = $this->select($this->table, $fields, $cond, $append);
+
+        if(!$res) {
+            return [];
+        }
+
+        foreach($res as &$value) {
+            $catInfo = Category_Model::getInstance()->getCatInfo($value['catId']);
+            if(!$catInfo) {
+                continue;
+            }
+
+            switch($catInfo['parentId']) {
+                case 1:
+                    // recruit
+                    $salaryType = [
+                        '0' => '面议',
+                        '1' => '小时',
+                        '2' => '日',
+                        '3' => '周',
+                        '4' => '月',
+                        '5' => '年',
+                    ];
+                    $addInfo = Recruitment_Model::getInstance()->getRecruitInfo($value['infoId']);
+                    if($addInfo['salaryType']) {
+                        $addInfo['price'] = $addInfo['salary'] / 10 . "/" . $salaryType[$addInfo['salaryType']];
+                    } else {
+                        $addInfo['price'] = "面议";
+                    }
+                    break;
+                case 2:
+                    // travel
+                    $addInfo = Travel_Model::getInstance()->getTravelInfo($value['infoId']);
+                    break;
+                case 3:
+                    // edu
+                    $addInfo    = Education_Model::getInstance()->getEduInfo($value['infoId']);
+                    break;
+                default:
+                    $addInfo['price'] = "--";
+            }
+
+            $value['price'] = $addInfo['price'];
+        }
+        unset($value);
 
         return $res ?: [];
     }
@@ -91,6 +137,8 @@ class Information_Model extends Base_Model {
             'detailAddress',
             'contact',
             'phoneNum',
+            'viewCnt',
+            'commCnt',
             'createdTime',
         ];
 
@@ -99,9 +147,52 @@ class Information_Model extends Base_Model {
             "catId IN ($strIds)",
         ];
         $append = "ORDER BY createdTime DESC";
-        $baseInfoList = $this->select($this->table, $fields, $cond, $append);
+        $res = $this->select($this->table, $fields, $cond, $append);
+        if(!$res) {
+            return [];
+        }
 
-        return $baseInfoList ?: [];
+        foreach($res as &$value) {
+            $catInfo = Category_Model::getInstance()->getCatInfo($value['catId']);
+            if(!$catInfo) {
+                continue;
+            }
+
+            switch($catInfo['parentId']) {
+                case 1:
+                    // recruit
+                    $salaryType = [
+                        '0' => '面议',
+                        '1' => '小时',
+                        '2' => '日',
+                        '3' => '周',
+                        '4' => '月',
+                        '5' => '年',
+                    ];
+                    $addInfo = Recruitment_Model::getInstance()->getRecruitInfo($value['infoId']);
+                    if($addInfo['salaryType']) {
+                        $addInfo['price'] = $addInfo['salary'] / 10 . "/" . $salaryType[$addInfo['salaryType']];
+                    } else {
+                        $addInfo['price'] = "面议";
+                    }
+                    break;
+                case 2:
+                    // travel
+                    $addInfo = Travel_Model::getInstance()->getTravelInfo($value['infoId']);
+                    break;
+                case 3:
+                    // edu
+                    $addInfo    = Education_Model::getInstance()->getEduInfo($value['infoId']);
+                    break;
+                default:
+                    $addInfo['price'] = "--";
+            }
+
+            $value['price'] = $addInfo['price'];
+        }
+        unset($value);
+
+        return $res ?: [];
     }
 
 
@@ -119,6 +210,8 @@ class Information_Model extends Base_Model {
             'detailAddress',
             'contact',
             'phoneNum',
+            'viewCnt',
+            'commCnt',
             'createdTime',
         ];
         
@@ -259,6 +352,8 @@ class Information_Model extends Base_Model {
             'detailAddress',
             'contact',
             'phoneNum',
+            'viewCnt',
+            'commCnt',
             'createdTime',
         ];
         $cond = [
@@ -268,8 +363,50 @@ class Information_Model extends Base_Model {
         $perPage = self::INFO_PER_PAGE_SIZE;
         $offset = ($page - 1) * $perPage;
         $append = "ORDER BY updatedTime DESC LIMIT $offset, $perPage";
-
         $res = $this->select($this->table, $fields, $cond, $append);
+        if(!$res) {
+            return [];
+        }
+
+        foreach($res as &$value) {
+            $catInfo = Category_Model::getInstance()->getCatInfo($value['catId']);
+            if(!$catInfo) {
+                continue;
+            }
+
+            switch($catInfo['parentId']) {
+                case 1:
+                    // recruit
+                    $salaryType = [
+                        '0' => '面议',
+                        '1' => '小时',
+                        '2' => '日',
+                        '3' => '周',
+                        '4' => '月',
+                        '5' => '年',
+                    ];
+                    $addInfo = Recruitment_Model::getInstance()->getRecruitInfo($value['infoId']);
+                    if($addInfo['salaryType']) {
+                        $addInfo['price'] = $addInfo['salary'] / 10 . "/" . $salaryType[$addInfo['salaryType']];
+                    } else {
+                        $addInfo['price'] = "面议";
+                    }
+                    break;
+                case 2:
+                    // travel
+                    $addInfo = Travel_Model::getInstance()->getTravelInfo($value['infoId']);
+                    break;
+                case 3:
+                    // edu
+                    $addInfo    = Education_Model::getInstance()->getEduInfo($value['infoId']);
+                    break;
+                default:
+                    $addInfo['price'] = "--";
+            }
+
+            $value['price'] = $addInfo['price'];
+        }
+        unset($value);
 
         return $res ?: [];
     }

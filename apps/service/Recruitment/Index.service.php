@@ -97,11 +97,6 @@ class Recruitment_Index_Service extends Global_Service_Base {
             return [];
         }
 
-        if($recruitInfo['salaryType']) {
-            $recruitInfo['salary'] /= 10;
-        } else {
-            $recruitInfo['salary'] = 0;
-        }
         $salaryType = [
             '0' => '面议',
             '1' => '小时',
@@ -110,7 +105,11 @@ class Recruitment_Index_Service extends Global_Service_Base {
             '4' => '月',
             '5' => '年',
         ];
-        $recruitInfo['salaryType'] = $salaryType[$recruitInfo['salaryType']];
+        if($recruitInfo['salaryType']) {
+            $recruitInfo['price'] = $recruitInfo['salary'] / 10 . "元/" . $salaryType[$recruitInfo['salaryType']];
+        } else {
+            $recruitInfo['price'] = "面议";
+        }
 
         $catInfo  = Category_Model::getInstance()->getCatInfo($baseInfo['catId']);
         $recruitInfo['catName'] = $catInfo['catName'];
