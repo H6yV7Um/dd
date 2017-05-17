@@ -327,3 +327,6 @@ INSERT INTO `areaCounty` VALUES (1,110101,'东城区',110100,'2016-03-05 03:53:2
 
 ## 修改收藏表结构
 alter table collection add column catId int unsigned not null after infoId;
+
+## 修改info表结构
+alter table information change address address varchar(155) not null default '';
