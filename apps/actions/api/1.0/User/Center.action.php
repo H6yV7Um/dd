@@ -78,6 +78,10 @@ class User_Center_Action extends Global_Action_Base {
             $loginUserId = User_Pass_Service::getLoginUserId();
 
             $pubList = User_Center_Service::getInstance()->getPubList($loginUserId, $this->get['type'], $this->get['page']);
+            foreach($pubList as &$pubInfo) {
+                $pubInfo['content'] = $pubInfo['title'];
+            }
+            unset($pubInfo);
 
             $this->endWithResponseJson($pubList);
         } catch(Exception $exception) {
@@ -142,6 +146,10 @@ class User_Center_Action extends Global_Action_Base {
             $loginUserId = User_Pass_Service::getLoginUserId();
 
             $collList = User_Center_Service::getInstance()->getCollList($loginUserId, $this->get['type'], $this->get['page']);
+            foreach($collList as &$collInfo) {
+                $collInfo['content'] = $collInfo['title'];
+            }
+            unset($collInfo);
 
             $this->endWithResponseJson($collList);
         } catch(Exception $exception) {
