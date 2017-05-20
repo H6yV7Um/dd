@@ -410,6 +410,7 @@ class Information_Model extends Base_Model {
             }
 
             $value['price'] = $addInfo['price'];
+            $value['parentId'] = $catInfo['parentId'];
         }
         unset($value);
 
