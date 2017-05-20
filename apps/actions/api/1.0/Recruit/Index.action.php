@@ -17,7 +17,6 @@ class Recruit_Index_Action extends Global_Action_Base {
         [
             'key'     => 'title',
             'func'    => 'strval',
-            'regex'   => '/^.+$/',
             'method'  => 'post',
         ],
         [
@@ -39,33 +38,28 @@ class Recruit_Index_Action extends Global_Action_Base {
         [
             'key'     => 'contact',
             'func'    => 'strval',
-            'regex'   => '/^.+$/',
             'method'  => 'post',
         ],
         [
             'key'     => 'phoneNum',
             'func'    => 'strval',
-            'regex'   => '/^1\d{10}$/',
             'method'  => 'post',
         ],
         [
             'key'     => 'salary',
             'default' => '0',
             'func'    => 'doubleval',
-            'regex'   => '/^\d+$/',
             'method'  => 'post',
         ],
         [
             'key'     => 'salaryType',
             'default' => '0',
             'func'    => 'intval',
-            'regex'   => '/^[0-5]{1}$/',
             'method'  => 'post',
         ],
         [
             'key'     => 'number',
             'func'    => 'intval',
-            'regex'   => '/^\d+$/',
             'method'  => 'post',
         ],
         [

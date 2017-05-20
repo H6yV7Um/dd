@@ -17,7 +17,6 @@ class Travel_Index_Action extends Global_Action_Base {
         [
             'key'     => 'title',
             'func'    => 'strval',
-            'regex'   => '/^.+$/',
             'method'  => 'post',
         ],
         [
@@ -39,13 +38,11 @@ class Travel_Index_Action extends Global_Action_Base {
         [
             'key'     => 'contact',
             'func'    => 'strval',
-            'regex'   => '/^.+$/',
             'method'  => 'post',
         ],
         [
             'key'     => 'phoneNum',
             'func'    => 'strval',
-            'regex'   => '/^1\d{10}$/',
             'method'  => 'post',
         ],
         [
