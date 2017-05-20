@@ -9,7 +9,7 @@ class Information_Model extends Base_Model {
      */
     protected $table = 'information';
 
-    const INFO_PER_PAGE_SIZE = '5';
+    const INFO_PER_PAGE_SIZE = '15';
 
     /**
      * @return Information_Model
@@ -146,7 +146,7 @@ class Information_Model extends Base_Model {
         $cond = [
             "catId IN ($strIds)",
         ];
-        $append = "ORDER BY createdTime DESC";
+        $append = "ORDER BY viewCnt DESC";
         $res = $this->select($this->table, $fields, $cond, $append);
         if(!$res) {
             return [];
@@ -367,7 +367,7 @@ class Information_Model extends Base_Model {
 
         $perPage = self::INFO_PER_PAGE_SIZE;
         $offset = ($page - 1) * $perPage;
-        $append = "ORDER BY updatedTime DESC LIMIT $offset, $perPage";
+        $append = "ORDER BY viewCnt DESC LIMIT $offset, $perPage";
         $res = $this->select($this->table, $fields, $cond, $append);
         if(!$res) {
             return [];
