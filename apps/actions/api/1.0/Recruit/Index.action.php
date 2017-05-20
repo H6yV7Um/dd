@@ -23,20 +23,17 @@ class Recruit_Index_Action extends Global_Action_Base {
         [
             'key'     => 'content',
             'func'    => 'strval',
-            'regex'   => '/^.+$/',
             'method'  => 'post',
         ],
         [
             'key'     => 'demand',
             'func'    => 'strval',
-            'regex'   => '/^.+$/',
             'method'  => 'post',
         ],
         [
             'key'     => 'extra',
             'default' => '',
             'func'    => 'strval',
-            'regex'   => '/^.*$/',
             'method'  => 'post',
         ],
         [
