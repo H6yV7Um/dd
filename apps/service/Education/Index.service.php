@@ -91,6 +91,10 @@ class Education_Index_Service extends Global_Service_Base {
      */
     public function getEduInfo($infoId) {
         $baseInfo = Information_Model::getInstance()->getBaseInfo($infoId);
+        // 收藏
+        $loginUserId = User_Pass_Service::getLoginUserId();
+        $baseInfo['isColl'] = Collection_Model::getInstance()->isColl($loginUserId, $infoId) ? "1" : "0";
+        
         $baseInfo['address'] = Information_Model::getInstance()->getAddressByCode($baseInfo['address']);
 
         $eduInfo = Education_Model::getInstance()->getEduInfo($infoId);

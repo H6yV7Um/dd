@@ -92,6 +92,10 @@ class Recruitment_Index_Service extends Global_Service_Base {
      */
     public function getRecruitInfo($infoId) {
         $baseInfo = Information_Model::getInstance()->getBaseInfo($infoId);
+        // 收藏
+        $loginUserId = User_Pass_Service::getLoginUserId();
+        $baseInfo['isColl'] = Collection_Model::getInstance()->isColl($loginUserId, $infoId) ? "1" : "0";
+
         // todo 丑陋, 暂且如此吧
         // todo 很多类似的丑陋
         $baseInfo['address'] = Information_Model::getInstance()->getAddressByCode($baseInfo['address']);

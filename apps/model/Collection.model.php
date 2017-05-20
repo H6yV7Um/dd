@@ -77,4 +77,14 @@ class Collection_Model extends Base_Model {
 
         return $res ? true : false;
     }
+
+    public function isColl($userId, $infoId) {
+        $cond = [
+            'userId = ' => $userId,
+            'infoId = ' => $infoId,
+        ];
+        $res = $this->selectCount($this->table, $cond);
+
+        return $res ? true : false;
+    }
 }
